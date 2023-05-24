@@ -46,10 +46,6 @@ void update(int value) {
     for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
     	particle = PQ_PARTICLE->particleArray[i];
     	 ballRadius = particle.radius;
-    //	ballX = particle.x;
-    //	ballY = particle.y;
-//	ballXSpeed = particle.vx;
-//	ballYSpeed = particle.vy;
     	PQ_PARTICLE->particleArray[i].x += particle.vx;
    	PQ_PARTICLE->particleArray[i].y += particle.vy;
    	 // Check for collision with window edges
@@ -79,13 +75,15 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(width, height);
     glutCreateWindow("Bouncing Ball");
-    //float aspectRatio = (float)width / (float)height;
+    
     // Set the background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    
     // Set the projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(-1.0f, 1.0f, -1.0f, 1.0f);
+    
     // Set the display function and timer
     glutDisplayFunc(drawScene);
     glutTimerFunc(16, update, 0);

@@ -1,17 +1,16 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include"collisionSystem.h"
+#include"randomParticleGenerator.h"
 #include<math.h>
 #include<time.h>
 
-void createRandomSystem(CollisionSystem** system, int particleCount){
-	*system = (CollisionSystem*)malloc(sizeof(CollisionSystem));
+void createRandomSystem(particleSystem** system, int particleCount){
+	*system = (particleSystem*)malloc(sizeof(particleSystem));
 	if(!(*system)){
 		printf("Malloc in generation of random system failed");
 		return;
 	}
 	(*system)->particleCount = particleCount;
-	(*system)->pq = NULL;
 	(*system)->particleArray = (Particle*)malloc(sizeof(Particle)*particleCount);
 	divideAndAssignParticles(particleCount, -1, 1, -1, 1, (*system)->particleArray, 0);
 }
@@ -57,7 +56,7 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 		for (int i = arrayPos; i < arrayPos+particleCount; i++){
 			particles[i].x = getRandomDouble(left,right);
 	       		particles[i].y = getRandomDouble(bottom,top);
-			printf("%d x = %lf y = %lf\n",i,particles[i].x,particles[i].y);
+			//printf("%d x = %lf y = %lf\n",i,particles[i].x,particles[i].y);
 	       	 	particles[i].vx = getRandomDouble(-0.05,0.05);
 	        	particles[i].vy = getRandomDouble(-0.05,0.05);
 	        	particles[i].radius = getRandomDouble(0.01,0.02);
@@ -93,16 +92,5 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 //		printf("Particle %d - x:")
 //	}
 //}
-
-//int main(){
-//	CollisionSystem* cs;
-//	createRandomSystem(&cs, 36);
-//	printf("%d\n",cs->particleCount);
-//	for(int i = 0;i<cs->particleCount;i++){
-//		printf("%f ",cs->particleArray[i].radius);
-//	}
-//	return 0;
-//}
-
 
 

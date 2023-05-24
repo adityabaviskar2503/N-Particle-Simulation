@@ -1,0 +1,57 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/anvay/COEP/DSA-II_project/N-Particle-Simulation/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+Color	particle.h	/^} Color;$/;"	t	typeref:struct:Colour
+Colour	particle.h	/^typedef struct Colour{$/;"	s
+MIN_PQ_H_	MinPriorityQueue.h	/^#define MIN_PQ_H_$/;"	d
+MinPriorityQueue	MinPriorityQueue.h	/^typedef struct MinPriorityQueue{$/;"	s
+MinPriorityQueue	MinPriorityQueue.h	/^}MinPriorityQueue;$/;"	t	typeref:struct:MinPriorityQueue
+N-Particle-Simulation	README.md	/^# N-Particle-Simulation$/;"	c
+PARTICLE_H_	particle.h	/^#define PARTICLE_H_$/;"	d
+PQ_COL_SYS	pq_collisionSystem.h	/^#define PQ_COL_SYS$/;"	d
+PQ_PARTICLE	test.c	/^#define PQ_PARTICLE /;"	d	file:
+Particle	particle.h	/^typedef struct Particle{$/;"	s
+Particle	particle.h	/^} Particle;$/;"	t	typeref:struct:Particle
+RANDOM_PARTICLE_GEN_	randomParticleGenerator.h	/^#define RANDOM_PARTICLE_GEN_$/;"	d
+This is our DSA-2 2nd year project	README.md	/^## This is our DSA-2 2nd year project$/;"	s	chapter:N-Particle-Simulation
+arr	MinPriorityQueue.h	/^	int* arr;$/;"	m	struct:MinPriorityQueue	typeref:typename:int *
+b	particle.h	/^	float r,g,b;$/;"	m	struct:Colour	typeref:typename:float
+checkOverlap	randomParticleGenerator.c	/^int checkOverlap(Particle* particles, int numParticles, int currentIndex) {$/;"	f	typeref:typename:int
+collisions	particle.h	/^	int collisions;$/;"	m	struct:Particle	typeref:typename:int
+color	particle.h	/^	Color color;$/;"	m	struct:Particle	typeref:typename:Color
+createRandomSystem	randomParticleGenerator.c	/^void createRandomSystem(particleSystem** system, int particleCount){$/;"	f	typeref:typename:void
+distance	randomParticleGenerator.c	/^double distance(double x1, double y1, double x2, double y2) {$/;"	f	typeref:typename:double
+divideAndAssignParticles	randomParticleGenerator.c	/^void divideAndAssignParticles(int particleCount, double left, double right, double bottom, doubl/;"	f	typeref:typename:void
+drawCircle	test.c	/^void drawCircle(float r, float x, float y){$/;"	f	typeref:typename:void
+drawScene	test.c	/^void drawScene() {$/;"	f	typeref:typename:void
+g	particle.h	/^	float r,g,b;$/;"	m	struct:Colour	typeref:typename:float
+getRandomDouble	randomParticleGenerator.c	/^double getRandomDouble(double min, double max) {$/;"	f	typeref:typename:double
+height	test.c	/^int width = 1000, height = 1000;$/;"	v	typeref:typename:int
+main	test.c	/^int main(int argc, char** argv) {$/;"	f	typeref:typename:int
+mass	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
+particleArray	randomParticleGenerator.h	/^	Particle* particleArray;$/;"	m	struct:particleSystem	typeref:typename:Particle *
+particleCount	randomParticleGenerator.h	/^	int particleCount;$/;"	m	struct:particleSystem	typeref:typename:int
+particleSystem	randomParticleGenerator.h	/^typedef struct particleSystem{$/;"	s
+particleSystem	randomParticleGenerator.h	/^}particleSystem;$/;"	t	typeref:struct:particleSystem
+pq	pq_collisionSystem.h	/^	MinPriorityQueue* pq;$/;"	m	struct:pq_CollisionSystem	typeref:typename:MinPriorityQueue *
+pq_CollisionSystem	pq_collisionSystem.h	/^typedef struct pq_CollisionSystem{$/;"	s
+pq_CollisionSystem	pq_collisionSystem.h	/^}pq_CollisionSystem;$/;"	t	typeref:struct:pq_CollisionSystem
+pq_sys	test.c	/^pq_CollisionSystem* pq_sys;$/;"	v	typeref:typename:pq_CollisionSystem *
+r	particle.h	/^	float r,g,b;$/;"	m	struct:Colour	typeref:typename:float
+radius	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
+sys	pq_collisionSystem.h	/^    particleSystem* sys;$/;"	m	struct:pq_CollisionSystem	typeref:typename:particleSystem *
+t	pq_collisionSystem.h	/^	double t;$/;"	m	struct:pq_CollisionSystem	typeref:typename:double
+update	test.c	/^void update(int value) {$/;"	f	typeref:typename:void
+vx	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
+vy	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
+width	test.c	/^int width = 1000, height = 1000;$/;"	v	typeref:typename:int
+x	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
+y	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double

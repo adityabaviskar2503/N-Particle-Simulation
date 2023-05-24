@@ -3,11 +3,12 @@
 #include<GL/glut.h>
 #include<math.h>
 #include<stdlib.h>
-#include"collisionSystem.h"
+#include"pq_collisionSystem.h"
+#define PQ_PARTICLE pq_sys.sys
 // Window size
 int width = 1000, height = 1000;
 
-CollisionSystem* sys;
+pq_CollisionSystem pq_sys;
 
 void drawCircle(float r, float x, float y);
 
@@ -18,8 +19,8 @@ void drawScene() {
 	
     // Draw the ball
     Particle particle;
-    for(int i = 0 ; i < sys->particleCount ; i++){
-    	particle = sys->particleArray[i];
+    for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
+    	particle = PQ_PARTICLE->particleArray[i];
     	glColor3f(1.0f, 1.0f, 0.0f);
    	drawCircle(particle.radius, particle.x, particle.y);
     }
@@ -42,21 +43,21 @@ void update(int value) {
     // Update the ball position
     Particle particle;
     double ballRadius;// ballX, ballY, ballXSpeed, ballYSpeed
-    for(int i = 0 ; i < sys->particleCount ; i++){
-    	particle = sys->particleArray[i];
+    for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
+    	particle = PQ_PARTICLE->particleArray[i];
     	 ballRadius = particle.radius;
     //	ballX = particle.x;
     //	ballY = particle.y;
 //	ballXSpeed = particle.vx;
 //	ballYSpeed = particle.vy;
-    	sys->particleArray[i].x += particle.vx;
-   	sys->particleArray[i].y += particle.vy;
+    	PQ_PARTICLE->particleArray[i].x += particle.vx;
+   	PQ_PARTICLE->particleArray[i].y += particle.vy;
    	 // Check for collision with window edges
-	if (sys->particleArray[i].x > 1.0f - ballRadius || sys->particleArray[i].x < -1.0f + ballRadius) {
-       		sys->particleArray[i].vx = -particle.vx;
+	if (PQ_PARTICLE->particleArray[i].x > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].x < -1.0f + ballRadius) {
+       		PQ_PARTICLE->particleArray[i].vx = -particle.vx;
    	 }
-    	if (sys->particleArray[i].y > 1.0f - ballRadius || sys->particleArray[i].y < -1.0f + ballRadius) {
-       		sys->particleArray[i].vy = -particle.vy;
+    	if (PQ_PARTICLE->particleArray[i].y > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].y < -1.0f + ballRadius) {
+       		PQ_PARTICLE->particleArray[i].vy = -particle.vy;
     	} 	
    	
     }
@@ -71,14 +72,14 @@ void update(int value) {
 // Main function
 int main(int argc, char** argv) {
 	
-	createRandomSystem(&sys, 100);
+	createRandomSystem(&(pq_sys.sys), 1000);
 
     // Initialize GLUT and create a window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(width, height);
     glutCreateWindow("Bouncing Ball");
-    float aspectRatio = (float)width / (float)height;
+    //float aspectRatio = (float)width / (float)height;
     // Set the background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     // Set the projection

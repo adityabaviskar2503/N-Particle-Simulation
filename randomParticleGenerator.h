@@ -1,14 +1,15 @@
-#include "particle.h"
-#include "MinPriorityQueue.h"
+#ifndef RANDOM_PARTICLE_GEN_
+#define RANDOM_PARTICLE_GEN_
 
-typedef struct CollisionSystem{
-	MinPriorityQueue* pq;
+#include "particle.h"
+
+typedef struct particleSystem{
 	Particle* particleArray;
 	int particleCount;
-	double t;
-}CollisionSystem;
+	//double t;
+}particleSystem;
 
-void createRandomSystem(CollisionSystem** system, int particleCount);
+void createRandomSystem(particleSystem** system, int particleCount);
 
 double distance(double x1, double y1, double x2, double y2);
 
@@ -17,3 +18,5 @@ int checkOverlap(Particle* particles, int numParticles, int currentIndex);
 double getRandomDouble(double min, double max);
 
 void divideAndAssignParticles(int particleCount, double left, double right, double top, double bottom, Particle* particles, int arrayPos);
+
+#endif

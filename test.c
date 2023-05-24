@@ -7,7 +7,7 @@
 // Window size
 int width = 1000, height = 1000;
 
-CollisionSystem sys;
+CollisionSystem* sys;
 
 void drawCircle(float r, float x, float y);
 
@@ -18,8 +18,8 @@ void drawScene() {
 	
     // Draw the ball
     Particle particle;
-    for(int i = 0 ; i < sys.particleCount ; i++){
-    	particle = sys.particleArray[i];
+    for(int i = 0 ; i < sys->particleCount ; i++){
+    	particle = sys->particleArray[i];
     	glColor3f(1.0f, 1.0f, 0.0f);
    	drawCircle(particle.radius, particle.x, particle.y);
     }
@@ -42,22 +42,21 @@ void update(int value) {
     // Update the ball position
     Particle particle;
     double ballRadius;// ballX, ballY, ballXSpeed, ballYSpeed
-    for(int i = 0 ; i < sys.particleCount ; i++){
-    	particle = sys.particleArray[i];
+    for(int i = 0 ; i < sys->particleCount ; i++){
+    	particle = sys->particleArray[i];
     	 ballRadius = particle.radius;
     //	ballX = particle.x;
     //	ballY = particle.y;
 //	ballXSpeed = particle.vx;
 //	ballYSpeed = particle.vy;
-    	sys.particleArray[i].x += particle.vx;
-   	sys.particleArray[i].y += particle.vy;
-	float aspectRatio = (float)width / (float)height;
+    	sys->particleArray[i].x += particle.vx;
+   	sys->particleArray[i].y += particle.vy;
    	 // Check for collision with window edges
-	if (sys.particleArray[i].x > 1.0f - ballRadius || sys.particleArray[i].x < -1.0f + ballRadius) {
-       		sys.particleArray[i].vx = -particle.vx;
+	if (sys->particleArray[i].x > 1.0f - ballRadius || sys->particleArray[i].x < -1.0f + ballRadius) {
+       		sys->particleArray[i].vx = -particle.vx;
    	 }
-    	if (sys.particleArray[i].y > 1.0f - ballRadius || sys.particleArray[i].y < -1.0f + ballRadius) {
-       		sys.particleArray[i].vy = -particle.vy;
+    	if (sys->particleArray[i].y > 1.0f - ballRadius || sys->particleArray[i].y < -1.0f + ballRadius) {
+       		sys->particleArray[i].vy = -particle.vy;
     	} 	
    	
     }
@@ -72,7 +71,7 @@ void update(int value) {
 // Main function
 int main(int argc, char** argv) {
 	
-	createRandomSystem(&sys, 36);
+	createRandomSystem(&sys, 100);
 
     // Initialize GLUT and create a window
     glutInit(&argc, argv);
@@ -85,14 +84,7 @@ int main(int argc, char** argv) {
     // Set the projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-   // gluOrtho2D(-1.0f, 1.0f, -1.0f, 1.0f);
-	if (aspectRatio >= 1.0f) {
-        	glOrtho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
-    	}
-   	else {
-        	glOrtho(-1.0f, 1.0f, -1.0f / aspectRatio, 1.0f / aspectRatio, -1.0f, 1.0f);
-   	}
-
+    gluOrtho2D(-1.0f, 1.0f, -1.0f, 1.0f);
     // Set the display function and timer
     glutDisplayFunc(drawScene);
     glutTimerFunc(16, update, 0);

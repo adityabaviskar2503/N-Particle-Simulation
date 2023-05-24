@@ -11,10 +11,9 @@ void createRandomSystem(CollisionSystem** system, int particleCount){
 		return;
 	}
 	(*system)->particleCount = particleCount;
-//	printf("value here is %d %d\n",particleCount, system->particleCount);
 	(*system)->pq = NULL;
 	(*system)->particleArray = (Particle*)malloc(sizeof(Particle)*particleCount);
-//	divideAndAssignParticles(particleCount, -1, 1, -1, 1, (*system)->particleArray, 0);
+	divideAndAssignParticles(particleCount, -1, 1, -1, 1, (*system)->particleArray, 0);
 }
 
 double distance(double x1, double y1, double x2, double y2) {
@@ -46,24 +45,27 @@ int checkOverlap(Particle* particles, int numParticles, int currentIndex) {
 }
 
 double getRandomDouble(double min, double max) {
+//	srand(time(0));
 	double range = max - min;
     	double randomValue = ((double)rand() / RAND_MAX) * range + min;
     	return randomValue;
 }
 
-void divideAndAssignParticles(int particleCount, double left, double right, double top, double bottom, Particle* particles, int arrayPos){
+void divideAndAssignParticles(int particleCount, double left, double right, double bottom, double top, Particle* particles, int arrayPos){
 	if(particleCount < 40){
-		for (int i = arrayPos; i < particleCount; i++){
+	//	printf("%d %lf %lf %lf %lf %d\n",particleCount, left, right, bottom, top, arrayPos);
+		for (int i = arrayPos; i < arrayPos+particleCount; i++){
 			particles[i].x = getRandomDouble(left,right);
 	       		particles[i].y = getRandomDouble(bottom,top);
-	       	 	particles[i].vx = getRandomDouble(-0.2,0.2);
-	        	particles[i].vy = getRandomDouble(-0.2,0.2);
+			printf("%d x = %lf y = %lf\n",i,particles[i].x,particles[i].y);
+	       	 	particles[i].vx = getRandomDouble(-0.05,0.05);
+	        	particles[i].vy = getRandomDouble(-0.05,0.05);
 	        	particles[i].radius = getRandomDouble(0.01,0.02);
 	        	particles[i].mass = getRandomDouble(0.1,10);
 	        	particles[i].collisions = 0;
-		        particles[i].color.r = (float)rand() / RAND_MAX;
-		        particles[i].color.g = (float)rand() / RAND_MAX;
-			particles[i].color.b = (float)rand() / RAND_MAX;
+		        particles[i].color.r = getRandomDouble(0,1);
+		        particles[i].color.g = getRandomDouble(0,1); 
+			particles[i].color.b = getRandomDouble(0,1);
 	
 	        // Check for overlaps and reassign random values if necessary
 	        	while (checkOverlap(particles, particleCount, i)) {
@@ -74,13 +76,13 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 		}
 	}else{
 		//for top left region
-		divideAndAssignParticles(particleCount/4, left, (left+right)/2, top, (top+bottom)/2, particles, arrayPos);
+		divideAndAssignParticles(particleCount/4, left, (left+right)/2, (top+bottom)/2, top, particles, arrayPos);
 		//for top right region
-		divideAndAssignParticles(particleCount/4, (left+right)/2, right, top, (top+bottom)/2, particles, arrayPos);
+		divideAndAssignParticles(particleCount/4, (left+right)/2, right, (top+bottom)/2, top, particles, arrayPos+(particleCount/4));
 		// for bottom left region
-		divideAndAssignParticles(particleCount/4, left, (left+right)/2, (top+bottom)/2, bottom, particles, arrayPos);
+		divideAndAssignParticles(particleCount/4, left, (left+right)/2, bottom, (top+bottom)/2, particles, arrayPos+2*(particleCount/4));
 		//for bottom right region
-		divideAndAssignParticles(particleCount/4, (left+right)/2, right, (top+bottom)/2, bottom, particles, arrayPos);
+		divideAndAssignParticles(particleCount/4, (left+right)/2, right, bottom, (top+bottom)/2, particles, arrayPos+3*(particleCount/4));
 	}
 }
 
@@ -92,15 +94,15 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 //	}
 //}
 
-int main(){
-	CollisionSystem* cs;
-	createRandomSystem(&cs, 36);
-	printf("%d\n",cs->particleCount);
-//	for(int i = 0;i<cs.particleCount;i++){
-//		printf("%f ",cs.particleArray[i].radius);
+//int main(){
+//	CollisionSystem* cs;
+//	createRandomSystem(&cs, 36);
+//	printf("%d\n",cs->particleCount);
+//	for(int i = 0;i<cs->particleCount;i++){
+//		printf("%f ",cs->particleArray[i].radius);
 //	}
-	return 0;
-}
+//	return 0;
+//}
 
 
 

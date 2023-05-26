@@ -1,6 +1,7 @@
 #include<GL/gl.h>
 #include<GL/glu.h>
 #include<GL/glut.h>
+#include<GL/freeglut.h>
 #include<math.h>
 #include<stdlib.h>
 #include"pq_collisionSystem.h"
@@ -21,7 +22,7 @@ void drawScene() {
     Particle particle;
     for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
     	particle = PQ_PARTICLE->particleArray[i];
-    	glColor3f(1.0f, 1.0f, 0.0f);
+    	glColor3f(particle.color.r, particle.color.g, particle.color.b);
    	drawCircle(particle.radius, particle.x, particle.y);
     }
     // Swap buffers
@@ -64,6 +65,12 @@ void update(int value) {
     glutTimerFunc(16, update, 0);
 }
 
+void keyboardFunc(unsigned char key, int x, int y) {
+    if (key == 88) {
+        // Exit the main loop
+        glutLeaveMainLoop();
+    }
+}
 
 // Main function
 int main(int argc, char** argv) {

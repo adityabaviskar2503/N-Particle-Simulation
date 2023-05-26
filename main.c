@@ -4,6 +4,7 @@
 #include<GL/freeglut.h>
 #include<math.h>
 #include<stdlib.h>
+#include<stdio.h>
 #include"pq_collisionSystem.h"
 #define PQ_PARTICLE pq_sys.sys
 // Window size
@@ -68,34 +69,32 @@ void update(int value) {
 void keyboardFunc(unsigned char key, int x, int y) {
     if (key == 88) {
         // Exit the main loop
+	printf("Here");
         glutLeaveMainLoop();
     }
 }
 
 // Main function
-int main(int argc, char** argv) {
-	
+int main(int argc, char** argv) {	
 	createRandomSystem(&(pq_sys.sys), 200);
-
-    // Initialize GLUT and create a window
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(width, height);
-    glutCreateWindow("Bouncing Ball");
-    
-    // Set the background color
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    
-    // Set the projection
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1.0f, 1.0f, -1.0f, 1.0f);
-    
-    // Set the display function and timer
-    glutDisplayFunc(drawScene);
-    glutTimerFunc(16, update, 0);
-
+	// Initialize GLUT and create a window
+   	glutInit(&argc, argv);
+   	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+   	glutInitWindowSize(width, height);
+    	glutCreateWindow("Bouncing Ball");
+   	// Set the background color
+ 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+ 	   
+ 	// Set the projection
+ 	glMatrixMode(GL_PROJECTION);
+ 	glLoadIdentity();
+ 	gluOrtho2D(-1.0f, 1.0f, -1.0f, 1.0f);
+ 	   
+ 	// Set the display function and timer
+ 	glutDisplayFunc(drawScene);
+	glutTimerFunc(16, update, 0);
+ 	glutKeyboardFunc(keyboardFunc);
     // Start the main loop
-    glutMainLoop();
-    return 0;
+ 	glutMainLoop();
+ 	return 0;
 }

@@ -32,16 +32,16 @@ int isValid(Event* event){
 	return 1;
 }
 
-int main(){
-	Color c1;
-	c1.r = 1;
-	c1.g = 1;
-	c1.g = 0;
-        Particle* p1 = newParticle(0, 0, 0.2, 0.1, 0.1, 1, c1);
-        Particle* p2 = newParticle(0.3,-0.1, 0.1, -0.1, 0.1, 1, c1);
-	Event* e1 = newEvent(10, 0, p1, p2);
-	Event* e2 = newEvent(20, 0, p1, p2);
+//int main(){
+//	Color c1;
+//	c1.r = 1;
+//	c1.g = 1;
+//	c1.g = 0;
+//	Particle* p1 = newParticle(0, 0, 0.2, 0.1, 0.1, 1, c1);
+//	Particle* p2 = newParticle(0.3,-0.1, 0.1, -0.1, 0.1, 1, c1);
+//	Event* e1 = newEvent(10, 0, p1, p2);
+//	Event* e2 = newEvent(20, 0, p1, p2);
 //	p1->collisions++;
-	printf("%d\n",isValid(e2));
-}       
+//	printf("%d\n",isValid(e2));
+//}       
 

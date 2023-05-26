@@ -68,7 +68,7 @@ void update(int value) {
 // Main function
 int main(int argc, char** argv) {
 	
-	createRandomSystem(&(pq_sys.sys), 1000);
+	createRandomSystem(&(pq_sys.sys), 200);
 
     // Initialize GLUT and create a window
     glutInit(&argc, argv);

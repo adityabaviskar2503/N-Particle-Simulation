@@ -67,9 +67,8 @@ void update(int value) {
 }
 
 void keyboardFunc(unsigned char key, int x, int y) {
-    if (key == 88) {
+    if (key == 'x' || key == 'X') {
         // Exit the main loop
-	printf("Here");
         glutLeaveMainLoop();
     }
 }

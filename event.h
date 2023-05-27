@@ -1,3 +1,6 @@
+#ifndef EVENT_H_
+#define EVENT_H_
+
 #include "particle.h"
 
 typedef struct Event{
@@ -12,3 +15,5 @@ Event* newEvent(double time, char type, Particle* particle1, Particle* particle2
 int compare(Event* event1, Event* event2);
 
 int isValid(Event* event);
+
+#endif

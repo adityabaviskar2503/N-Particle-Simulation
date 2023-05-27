@@ -7,28 +7,9 @@
 #include<stdio.h>
 #include"pq_collisionSystem.h"
 #define PQ_PARTICLE pq_sys.sys
-// Window size
 int width = 1000, height = 1000;
 
 pq_CollisionSystem pq_sys;
-
-void drawCircle(float r, float x, float y);
-
-// Bouncing ball function
-void drawScene() {
-    // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT);
-	
-    // Draw the ball
-    Particle particle;
-    for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
-    	particle = PQ_PARTICLE->particleArray[i];
-    	glColor3f(particle.color.r, particle.color.g, particle.color.b);
-   	drawCircle(particle.radius, particle.x, particle.y);
-    }
-    // Swap buffers
-    glutSwapBuffers();
-}
 
 void drawCircle(float r, float x, float y){
 	glBegin(GL_TRIANGLE_FAN);
@@ -40,37 +21,51 @@ void drawCircle(float r, float x, float y){
 	glEnd();
 }
 
+void drawScene() {
+    	// Clear the screen
+    	glClear(GL_COLOR_BUFFER_BIT);
+	
+    	// Draw the particle
+    	Particle particle;
+    	for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
+    		particle = PQ_PARTICLE->particleArray[i];
+    		glColor3f(particle.color.r, particle.color.g, particle.color.b);
+   		drawCircle(particle.radius, particle.x, particle.y);
+    	}
+    	// Swap buffers
+    	glutSwapBuffers();
+}
+
 // Timer function for ball movement
 void update(int value) {
-    // Update the ball position
-    Particle particle;
-    double ballRadius;// ballX, ballY, ballXSpeed, ballYSpeed
-    for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
-    	particle = PQ_PARTICLE->particleArray[i];
-    	 ballRadius = particle.radius;
-    	PQ_PARTICLE->particleArray[i].x += particle.vx;
-   	PQ_PARTICLE->particleArray[i].y += particle.vy;
-   	 // Check for collision with window edges
-	if (PQ_PARTICLE->particleArray[i].x > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].x < -1.0f + ballRadius) {
-       		PQ_PARTICLE->particleArray[i].vx = -particle.vx;
-   	 }
-    	if (PQ_PARTICLE->particleArray[i].y > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].y < -1.0f + ballRadius) {
-       		PQ_PARTICLE->particleArray[i].vy = -particle.vy;
-    	} 	
-   	
-    }
-     // Redraw the scene
-    glutPostRedisplay();
+    	// Update the ball position
+    	Particle particle;
+    	double ballRadius;// ballX, ballY, ballXSpeed, ballYSpeed
+    	for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
+    		particle = PQ_PARTICLE->particleArray[i];
+    		ballRadius = particle.radius;
+    	    	move(&(PQ_PARTICLE->particleArray[i]),0.5);
+    	     // Check for collision with window edges
+    	    	if (PQ_PARTICLE->particleArray[i].x > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].x < -1.0f + ballRadius) {
+    	    		bounceOffVerticalWall(&(PQ_PARTICLE->particleArray[i]));
+    	     	}
+    		if (PQ_PARTICLE->particleArray[i].y > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].y < -1.0f + ballRadius) {
+    	    		bounceOffHorizontalWall(&(PQ_PARTICLE->particleArray[i]));
+    		} 	
+    	    
+    	}
+    	 // Redraw the scene
+    	glutPostRedisplay();
 
-    // Set the timer for the next update
-    glutTimerFunc(16, update, 0);
+    	// Set the timer for the next update
+    	glutTimerFunc(16, update, 0);
 }
 
 void keyboardFunc(unsigned char key, int x, int y) {
-    if (key == 'x' || key == 'X') {
-        // Exit the main loop
-        glutLeaveMainLoop();
-    }
+    	if (key == 'x' || key == 'X') {
+        	// Exit the main loop
+        	glutLeaveMainLoop();
+    	}
 }
 
 // Main function
@@ -93,7 +88,7 @@ int main(int argc, char** argv) {
  	glutDisplayFunc(drawScene);
 	glutTimerFunc(16, update, 0);
  	glutKeyboardFunc(keyboardFunc);
-    // Start the main loop
+ 	// Start the main loop
  	glutMainLoop();
  	return 0;
 }

@@ -3,14 +3,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-Event* newEvent(double time, char type, Particle* particle1, Particle* particle2){
+Event* newEvent(double time, Particle* particle1, Particle* particle2){
 	Event* e = malloc(sizeof(Event));
         if(!e){
         	printf("Error occured while creating a new event\n");
                 return NULL;
         }
         e->time = time;
-        e->type = type;
+        //e->type = type;
         e->particle1 = particle1;
         e->particle2 = particle2;
         e->countA = particle1->collisions;

@@ -81,65 +81,76 @@ void subdivideNode(quadtree_node* node) {
 
 }
 
-void insertParticleQuadtree(quadtree_node* node, Particle* particle) {
+void insertParticleQuadtree(quadtree_node** node, Particle* particle) {
     //if (!isLeafNode(&node)) {
-    if (node->children[0] == NULL) {
+    if ((*node)->children[0] == NULL) {
         // Find the child node that the particle belongs to and insert it there
-        double subWidth = node->width / 2.0;
-        double subHeight = node->height / 2.0;
+        double subWidth = (*node)->width / 2.0;
+        double subHeight = (*node)->height / 2.0;
 
-        if(isCuttingRegion(particle->x, particle->y, node->x - subWidth / 2, node->y - subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[0], particle);
-        
-        if(isCuttingRegion(particle->x, particle->y, node->x + subWidth / 2, node->y - subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[1], particle);
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x - subWidth / 2, (*node)->y - subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[0], particle);
 
-        if(isCuttingRegion(particle->x, particle->y, node->x - subWidth / 2, node->y + subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[2], particle);
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x + subWidth / 2, (*node)->y - subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[1], particle);
 
-        if(isCuttingRegion(particle->x, particle->y, node->x + subWidth / 2, node->y + subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[3], particle);
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x - subWidth / 2, (*node)->y + subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[2], particle);
+
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x + subWidth / 2, (*node)->y + subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[3], particle);
 
         return;
     }
 
     // Add the particle to the node's particle array
-    if (node->particle_count < MAX_PARTICLES) {
-        node->particles[node->particle_count++] = particle;
+    if ((*node)->particle_count < MAX_PARTICLES) {
+        (*node)->particles[(*node)->particle_count++] = particle;
     } else {
         // Subdivide the node if it has reached the maximum number of particles
-        subdivideNode(node);
+        subdivideNode(*node);
 
         // Reinsert the existing particles into the children nodes
-        for (int i = 0; i < node->particle_count; i++) {
-            Particle* existingParticle = node->particles[i];
+        for (int i = 0; i < (*node)->particle_count; i++) {
+            Particle* existingParticle = (*node)->particles[i];
             insertParticleQuadtree(node, existingParticle);
         }
         //
         // Clear the particle array in the current node
         for (int i = 0; i < MAX_PARTICLES; i++) {
-            node->particles[i] = NULL;
+            (*node)->particles[i] = NULL;
         }
 
-        node->particle_count = 0;
+        (*node)->particle_count = 0;
 
         // Insert the new particle into the appropriate child node
         // Find the child node that the particle belongs to and insert it there
-        double subWidth = node->width / 2.0;
-        double subHeight = node->height / 2.0;
+        double subWidth = (*node)->width / 2.0;
+        double subHeight = (*node)->height / 2.0;
 
-        if(isCuttingRegion(particle->x, particle->y, node->x - subWidth / 2, node->y - subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[0], particle);
-        
-        if(isCuttingRegion(particle->x, particle->y, node->x + subWidth / 2, node->y - subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[1], particle);
+        //        if(isCuttingRegion(particle->x, particle->y, node->x - subWidth / 2, node->y - subHeight / 2, particle->radius, subWidth, subHeight))
+        //            insertParticleQuadtree(node->children[0], particle);
+        //        
+        //        if(isCuttingRegion(particle->x, particle->y, node->x + subWidth / 2, node->y - subHeight / 2, particle->radius, subWidth, subHeight))
+        //            insertParticleQuadtree(node->children[1], particle);
+        //
+        //        if(isCuttingRegion(particle->x, particle->y, node->x - subWidth / 2, node->y + subHeight / 2, particle->radius, subWidth, subHeight))
+        //            insertParticleQuadtree(node->children[2], particle);
+        //
+        //        if(isCuttingRegion(particle->x, particle->y, node->x + subWidth / 2, node->y + subHeight / 2, particle->radius, subWidth, subHeight))
+        //            insertParticleQuadtree(node->children[3], particle);
+        //
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x - subWidth / 2, (*node)->y - subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[0], particle);
 
-        if(isCuttingRegion(particle->x, particle->y, node->x - subWidth / 2, node->y + subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[2], particle);
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x + subWidth / 2, (*node)->y - subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[1], particle);
 
-        if(isCuttingRegion(particle->x, particle->y, node->x + subWidth / 2, node->y + subHeight / 2, particle->radius, subWidth, subHeight))
-            insertParticleQuadtree(node->children[3], particle);
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x - subWidth / 2, (*node)->y + subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[2], particle);
 
+        if(isCuttingRegion(particle->x, particle->y, (*node)->x + subWidth / 2, (*node)->y + subHeight / 2, particle->radius, subWidth, subHeight))
+            insertParticleQuadtree(&(*node)->children[3], particle);
     }
 }
 

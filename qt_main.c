@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 	createRandomSystem(&(qt_sys), 50);
     for(int i = 0 ; i < qt_sys->particleCount ; i++){
     	//particle = qt_sys->particleArray[i];
-        insertParticleQuadtree(QT, &(qt_sys->particleArray[i]));
+        insertParticleQuadtree(&QT, &(qt_sys->particleArray[i]));
     }
 
 

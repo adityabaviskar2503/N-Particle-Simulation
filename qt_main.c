@@ -64,8 +64,12 @@ void update(int value) {
 //        } 	
 //
 //    }
-    propagate(QT, 1);
-    printf("here ");
+    propagate(&QT, 1);
+    printf("\n");
+    for(int i = 0 ; i < qt_sys->particleCount ; i++){
+    	//particle = qt_sys->particleArray[i];
+        printf("%lf ",(qt_sys->particleArray[i]).x);
+    }
     // Redraw the scene
     glutPostRedisplay();
 
@@ -84,7 +88,7 @@ void keyboardFunc(unsigned char key, int x, int y) {
 int main(int argc, char** argv) {	
 	//createRandomSystem(&(pq_sys.sys), 200);
     QT = createquadtree_node(0, 0, 2, 2);
-	createRandomSystem(&(qt_sys), 50);
+	createRandomSystem(&(qt_sys), 10);
     for(int i = 0 ; i < qt_sys->particleCount ; i++){
     	//particle = qt_sys->particleArray[i];
         insertParticleQuadtree(&QT, &(qt_sys->particleArray[i]));

@@ -154,11 +154,11 @@ void insertParticleQuadtree(quadtree_node** node, Particle* particle) {
     }
 }
 
-void propagate(quadtree_node* node, double dt){
+void propagate(quadtree_node** node, double dt){
    //if (isLeafNode(&node)) {
-   if (node->children[0] != NULL) {
-        for (int i = 0; i < node->particle_count; i++) {
-            Particle* particle = node->particles[i];
+   if ((*node)->children[0] != NULL) {
+        for (int i = 0; i < (*node)->particle_count; i++) {
+            Particle* particle = (*node)->particles[i];
             particle->x += (particle->vx * dt);
             particle->y += (particle->vy * dt);
             
@@ -195,7 +195,7 @@ void propagate(quadtree_node* node, double dt){
     } 
     else {
         for (int i = 0; i < 4; i++) {
-            propagate(node->children[i], dt);
+            propagate(&(*node)->children[i], dt);
         }
     }
 }

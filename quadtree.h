@@ -83,7 +83,7 @@ void subdivideNode(quadtree_node* node) {
 
 void insertParticleQuadtree(quadtree_node** node, Particle* particle) {
     //if (!isLeafNode(&node)) {
-    if ((*node)->children[0] == NULL) {
+    if ((*node)->children[0] != NULL) {
         // Find the child node that the particle belongs to and insert it there
         double subWidth = (*node)->width / 2.0;
         double subHeight = (*node)->height / 2.0;
@@ -167,22 +167,6 @@ void propagate(quadtree_node* node, double dt){
             double bottom_gap = particle->y - particle->radius + 1;
             double top_gap = 1 - particle->y - particle->radius;
 
-            if(left_gap < 0){
-                propagate(node, left_gap / particle->vx);
-            }
-
-            else if(right_gap < 0){
-                propagate(node, right_gap / particle->vx);
-            }
-
-            else if(bottom_gap < 0){
-                propagate(node, bottom_gap / particle->vy);
-            }
-
-            else if(top_gap < 0){
-                propagate(node, top_gap / particle->vy);
-            }
-
             if (left_gap == 0 || right_gap == 0) {
                 particle->vx *= -1;
             }
@@ -190,6 +174,23 @@ void propagate(quadtree_node* node, double dt){
             if (top_gap == 0 || bottom_gap == 0) {
                 particle->vy *= -1;
             }
+
+            //if(left_gap < 0){
+            //    propagate(node, left_gap / particle->vx);
+            //}
+
+            //else if(right_gap < 0){
+            //    propagate(node, right_gap / particle->vx);
+            //}
+
+            //else if(bottom_gap < 0){
+            //    propagate(node, bottom_gap / particle->vy);
+            //}
+
+            //else if(top_gap < 0){
+            //    propagate(node, top_gap / particle->vy);
+            //}
+
         }
     } 
     else {

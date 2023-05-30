@@ -65,6 +65,7 @@ void update(int value) {
 //
 //    }
     propagate(QT, 1);
+    printf("here ");
     // Redraw the scene
     glutPostRedisplay();
 

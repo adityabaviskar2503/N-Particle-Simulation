@@ -13,8 +13,16 @@ Event* newEvent(double time, Particle* particle1, Particle* particle2){
         //e->type = type;
         e->particle1 = particle1;
         e->particle2 = particle2;
-        e->countA = particle1->collisions;
-        e->countB = particle2->collisions;
+	if(particle1 != NULL){
+		e->countA = particle1->collisions;
+	}else{
+		e->countA = 0;
+	}
+	if(particle2 != NULL){
+        	e->countB = particle2->collisions;	
+	}else{
+		e->countB = 0;
+	}
 	return e;
 }
 
@@ -39,8 +47,8 @@ int isValid(Event* event){
 //	c1.g = 0;
 //	Particle* p1 = newParticle(0, 0, 0.2, 0.1, 0.1, 1, c1);
 //	Particle* p2 = newParticle(0.3,-0.1, 0.1, -0.1, 0.1, 1, c1);
-//	Event* e1 = newEvent(10, 0, p1, p2);
-//	Event* e2 = newEvent(20, 0, p1, p2);
+//	Event* e1 = newEvent(10, p1, p2);
+//	Event* e2 = newEvent(20, p1, p2);
 //	p1->collisions++;
 //	printf("%d\n",isValid(e2));
 //}       

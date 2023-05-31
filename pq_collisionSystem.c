@@ -11,34 +11,37 @@
 void predict(Particle* p, minPQ* pq, particleSystem* sys){
         if(p == NULL) return;
         double dt;
+	Event* event;
         for (int i = 0; i < sys->particleCount; i++){
                 dt = timeToHit(p, &(sys->particleArray[i]));
                 if(dt != INT_MAX){
-                        Event* event = newEvent(dt, p, &(sys->particleArray[i]));
+                        event = newEvent(dt, p, &(sys->particleArray[i]));
                         enqueue(pq, event);
                 }
         }
         dt = timeToHitVerticalWall(p);
         if(dt != INT_MAX){
-                Event* event = newEvent(dt, p, NULL);
+                event = newEvent(dt, p, NULL);
                 enqueue(pq, event);
         }
         dt = timeToHitHorizontalWall(p);
         if(dt != INT_MAX){
-                Event* event = newEvent(dt, p, NULL);
-                enqueue(pq, event);
+                event = newEvent(dt, p, NULL);
+       		enqueue(pq, event);
         }
 }
 
 void redraw(minPQ* pq){
+	printf("Redraw");
         Event* event = newEvent(1.0, NULL, NULL); //1 is the minimum time after which redraw will be called
         enqueue(pq, event);
 }
 
 void fillPQ(minPQ* pq, particleSystem* sys){
+//	printf("%d %d", pq->capacity, sys->particleCount);
         for(int i = 0;i < sys->particleCount;i++){
-                predict(&(sys->particleArray[i]), pq, sys); //fill PQ at the first render with all possible collisions
-        }
+		predict(&(sys->particleArray[i]), pq, sys); //fill PQ at the first render with all possible collisions
+	}
 	Event* event = newEvent(0, NULL, NULL); //initial redraw event
         enqueue(pq, event); //initial redraw event
 }
@@ -69,5 +72,10 @@ void updatePQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys){
 }
 
 
-
-
+//int main(){
+//	particleSystem* ps;
+//	createRandomSystem(&ps, 200);
+//	minPQ* pq = createPriorityQueue();
+//	fillPQ()
+//	
+//}

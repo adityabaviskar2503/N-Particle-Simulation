@@ -92,33 +92,33 @@ Event* dequeue(minPQ* queue) {
 
 //int main() {
 //	minPQ* eventQueue = createPriorityQueue(10);
+//	Color c1;
+//     	c1.r = 1;
+//       	c1.g = 1;
+//       	c1.g = 0;
+//
 //	
+//	Particle* p1 = newParticle(0, 0, 0.2, 0.1, 0.1, 1, c1);
+//	Particle* p2 = newParticle(0.3,-0.1, 0.1, -0.1, 0.1, 1, c1);
 //	// Create some sample events
-//	Event* event1 = (Event*)malloc(sizeof(Event));
-//	event1->time = 1.5;
+//	Event* event1 = newEvent(0.1,p1,p2);
 //	enqueue(eventQueue, event1);
 //	
-//	Event* event2 = (Event*)malloc(sizeof(Event));
-//	event2->time = 0.5;
+//	Event* event2 = newEvent(0.2,NULL,NULL);
 //	enqueue(eventQueue, event2);
 //	
-//	Event* event3 = (Event*)malloc(sizeof(Event));
-//	event3->time = 10;
+//	Event* event3 = newEvent(0.4,NULL,NULL);
 //	enqueue(eventQueue, event3);
 //	
-//	Event* event4 = (Event*)malloc(sizeof(Event));
-//	event4->time = 1.5;
+//	Event* event4 = newEvent(0.12,NULL,NULL);
 //	enqueue(eventQueue, event4);
 //	
-//	Event* event5 = (Event*)malloc(sizeof(Event));
-//	event5->time = 5.5;
+//	Event* event5 = newEvent(0.0,NULL,NULL);
 //	enqueue(eventQueue, event5);
 //	
-//	Event* event6 = (Event*)malloc(sizeof(Event));
-//	event6->time = 2.5;
+//	Event* event6 = newEvent(0.9,NULL,NULL);
 //	enqueue(eventQueue, event6);
 //	
-//	// Access events in the priority queue
 //	while (eventQueue->size > 0) {
 //	    	Event* dequeuedEvent = dequeue(eventQueue);
 //	    	// Process the event

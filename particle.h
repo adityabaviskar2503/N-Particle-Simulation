@@ -10,6 +10,8 @@ typedef struct Particle{
 	Color color;
 } Particle;
 
+Particle* newParticle(double x, double y, double vx, double vy, double radius, double mass, Color color);
+
 void draw(Particle* p);
 
 void move(Particle* p, double dt);

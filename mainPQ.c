@@ -1,4 +1,4 @@
-/*#include<GL/gl.h>
+#include<GL/gl.h>
 #include<GL/glu.h>
 #include<GL/glut.h>
 #include<GL/freeglut.h>
@@ -6,10 +6,10 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include"pq_collisionSystem.h"
-#define PQ_PARTICLE pq_sys.sys
+#define PQ_PARTICLE pq_sys->sys
 int width = 1000, height = 1000;
 
-pq_CollisionSystem pq_sys;
+pq_CollisionSystem* pq_sys;
 
 void drawCircle(float r, float x, float y){
 	glBegin(GL_TRIANGLE_FAN);
@@ -38,23 +38,10 @@ void drawScene() {
 
 // Timer function for ball movement
 void update(int value) {
-    	// Update the ball position
-    	Particle particle;
-    	double ballRadius;// ballX, ballY, ballXSpeed, ballYSpeed
-    	for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
-    		particle = PQ_PARTICLE->particleArray[i];
-    		ballRadius = particle.radius;
-    	    	move(&(PQ_PARTICLE->particleArray[i]),0.5);
-    	     // Check for collision with window edges
-    	    	if (PQ_PARTICLE->particleArray[i].x > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].x < -1.0f + ballRadius) {
-    	    		bounceOffVerticalWall(&(PQ_PARTICLE->particleArray[i]));
-    	     	}
-    		if (PQ_PARTICLE->particleArray[i].y > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].y < -1.0f + ballRadius) {
-    	    		bounceOffHorizontalWall(&(PQ_PARTICLE->particleArray[i]));
-    		} 	
-    	    
-    	}
-    	 // Redraw the scene
+	
+	updatePQ(pq_sys->pq, pq_sys->sys, pq_sys);
+	 
+	 // Redraw the scene
     	glutPostRedisplay();
 
     	// Set the timer for the next update
@@ -69,10 +56,15 @@ void keyboardFunc(unsigned char key, int x, int y) {
 }
 
 // Main function
-int main(int argc, char** argv) {	
-	createRandomSystem(&(pq_sys.sys), 200);
-	// Initialize GLUT and create a window
-   	glutInit(&argc, argv);
+int main(int argc, char** argv) {
+	pq_sys = malloc(sizeof(pq_CollisionSystem));
+	createRandomSystem(&(pq_sys->sys), 2);
+	pq_sys->pq = createPriorityQueue(2000);
+	pq_sys->t = 0;
+	printf("%d ",pq_sys->pq->capacity);
+	fillPQ(pq_sys->pq, pq_sys->sys);
+    // Initialize GLUT and create a window
+/*   	glutInit(&argc, argv);
    	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
    	glutInitWindowSize(width, height);
     	glutCreateWindow("Bouncing Ball");
@@ -89,6 +81,16 @@ int main(int argc, char** argv) {
 	glutTimerFunc(16, update, 0);
  	glutKeyboardFunc(keyboardFunc);
  	// Start the main loop
- 	glutMainLoop();
- 	return 0;
-}*/
+ 	glutMainLoop();*/
+int count = 0;
+	while (pq_sys->pq->size > 0) {
+		Event* dequeuedEvent = dequeue(pq_sys->pq);
+             	// Process the event
+              	printf("Event time: %f\n", dequeuedEvent->time);
+              	// Free memory allocated for the event
+              	free(dequeuedEvent);
+		count++;
+      	}
+	printf("%d ", count);
+	return 0;
+}

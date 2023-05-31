@@ -54,25 +54,32 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 	if(particleCount <= 40){
 	//	printf("%d %lf %lf %lf %lf %d\n",particleCount, left, right, bottom, top, arrayPos);
 		for (int i = arrayPos; i < arrayPos+particleCount; i++){
-	        	particles[i].radius = getRandomDouble(0.02,0.05);
+	        	particles[i].radius = getRandomDouble(RADIUS_LO,RADIUS_HI);
 			particles[i].x = getRandomDouble(left + particles[i].radius, right - particles[i].radius);
 	       		particles[i].y = getRandomDouble(bottom + particles[i].radius, top - particles[i].radius);
 			//printf("%d x = %lf y = %lf\n",i,particles[i].x,particles[i].y);
-	       	 	particles[i].vx = getRandomDouble(-0.02,0.02);
-	        	particles[i].vy = getRandomDouble(-0.02,0.02);
-	        	particles[i].mass = getRandomDouble(0.1,10);
+	       	 	particles[i].vx = getRandomDouble(-SPEED_LIMIT, SPEED_LIMIT);
+	        	particles[i].vy = getRandomDouble(-SPEED_LIMIT, SPEED_LIMIT);
+	        	//particles[i].mass = getRandomDouble(0.1,1);
+	        	particles[i].mass = 1;
 	        	particles[i].collisions = 0;
 		        particles[i].color.r = getRandomDouble(0,1);
 		        particles[i].color.g = getRandomDouble(0,1); 
 			particles[i].color.b = getRandomDouble(0,1);
-	
+			int checkOverlapCount = 0;
 	        // Check for overlaps and reassign random values if necessary
 	        	while (checkOverlap(particles, particleCount, i, arrayPos)) {
+				checkOverlapCount++;
 				//srand(time(0));
 			//	printf("**%d**\n",i);
 			//	printf("Before:");
 			//	printf("%f %f %f",particles[i].x, particles[i].y, particles[i].radius);
-	            		particles[i].radius = getRandomDouble(0.02,0.05);
+	            	//	particles[i].radius = getRandomDouble(0.008,0.009);
+				if(checkOverlapCount > 50){
+					printf("For chosen parameters, all particles cannot be fitted\n");
+					exit(0);
+				}
+				
 				particles[i].x = getRandomDouble(left + particles[i].radius, right - particles[i].radius);
 	       			particles[i].y = getRandomDouble(bottom + particles[i].radius, top - particles[i].radius);
 			//	printf("\nAfter:");

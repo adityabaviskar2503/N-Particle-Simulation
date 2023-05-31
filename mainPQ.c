@@ -15,7 +15,7 @@ void drawCircle(float r, float x, float y){
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex2f(x,y);
 	
-	for(float i = 0;i<360;i++){
+	for(float i = 0;i<360;i+=2){
 		glVertex2f(x + r*cos(i*180/M_PI),y + r*sin(i*180/M_PI));
 	}	
 	glEnd();
@@ -27,10 +27,12 @@ void drawScene() {
 	
     	// Draw the particle
     	Particle particle;
+	//printf("%d ", PQ_PARTICLE->particleCount);
     	for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
     		particle = PQ_PARTICLE->particleArray[i];
     		glColor3f(particle.color.r, particle.color.g, particle.color.b);
    		drawCircle(particle.radius, particle.x, particle.y);
+		//printf("%f ", particle.radius);
     	}
     	// Swap buffers
     	glutSwapBuffers();
@@ -38,14 +40,13 @@ void drawScene() {
 
 // Timer function for ball movement
 void update(int value) {
-	
+	//printf("%d\n",pq_sys->pq->size);
 	updatePQ(pq_sys->pq, pq_sys->sys, pq_sys);
-	 
 	 // Redraw the scene
+	//printf("Chutya bada wala\n"); 
     	glutPostRedisplay();
-
     	// Set the timer for the next update
-    	glutTimerFunc(16, update, 0);
+    	glutTimerFunc(30, update, value);
 }
 
 void keyboardFunc(unsigned char key, int x, int y) {
@@ -58,17 +59,20 @@ void keyboardFunc(unsigned char key, int x, int y) {
 // Main function
 int main(int argc, char** argv) {
 	pq_sys = malloc(sizeof(pq_CollisionSystem));
-	createRandomSystem(&(pq_sys->sys), 2);
-	pq_sys->pq = createPriorityQueue(2000);
+	createRandomSystem(&(pq_sys->sys), 5000);
+	pq_sys->pq = createPriorityQueue(40000);
 	pq_sys->t = 0;
-	printf("%d ",pq_sys->pq->capacity);
-	fillPQ(pq_sys->pq, pq_sys->sys);
-    // Initialize GLUT and create a window
-/*   	glutInit(&argc, argv);
+	fillPQ(pq_sys->pq, pq_sys->sys, pq_sys);
+//  	for(int i = 0;i<pq_sys->sys->particleCount;i++){
+//		printf("%f ", pq_sys->sys->particleArray[i].radius);
+//	}
+	// Initialize GLUT and create a window
+   	glutInit(&argc, argv);
    	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
    	glutInitWindowSize(width, height);
     	glutCreateWindow("Bouncing Ball");
-   	// Set the background color
+   	
+	// Set the background color
  	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
  	   
  	// Set the projection
@@ -78,11 +82,13 @@ int main(int argc, char** argv) {
  	   
  	// Set the display function and timer
  	glutDisplayFunc(drawScene);
-	glutTimerFunc(16, update, 0);
+	glutTimerFunc(0, update, 0);
  	glutKeyboardFunc(keyboardFunc);
- 	// Start the main loop
- 	glutMainLoop();*/
-int count = 0;
+ 	
+	// Start the main loop
+//	printf("Chutya\n");
+	glutMainLoop();
+/*	int count = 0;
 	while (pq_sys->pq->size > 0) {
 		Event* dequeuedEvent = dequeue(pq_sys->pq);
              	// Process the event
@@ -91,6 +97,6 @@ int count = 0;
               	free(dequeuedEvent);
 		count++;
       	}
-	printf("%d ", count);
+	printf("Count %d ", count);*/
 	return 0;
 }

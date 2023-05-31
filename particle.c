@@ -35,20 +35,20 @@ double timeToHit(Particle* this, Particle* that){
 	double dvdr = dx*dvx + dy*dvy;
 	if(dvdr > 0) return INT_MAX;
 	double dvdv = dvx*dvx + dvy*dvy;
+	if(dvdv == 0) return INT_MAX;
 	double drdr = dx*dx + dy*dy;
 	double sigma = this->radius + that->radius;
 	double d = (dvdr*dvdr) - dvdv * (drdr - sigma*sigma);
 	if(d < 0) return INT_MAX;
-	if(dvdv == 0) return INT_MAX;
 	return -(dvdr + sqrt(d))/dvdv;
 }
 
 double timeToHitVerticalWall(Particle* this){
 	double time;
 	if(this->vx > 0){
-		time = (1.0 - this->x)/this->vx;
+		time = ((1.0 - this->radius)-this->x)/this->vx;
 	}else if(this->vx < 0){
-		time = -(this->x + 1.0)/this->vx;
+		time = -(this->x + (1.0 - this->radius))/this->vx;
 	}else{
 		time = INT_MAX;
 	}
@@ -58,9 +58,9 @@ double timeToHitVerticalWall(Particle* this){
 double timeToHitHorizontalWall(Particle* this){
 	double time;
 	if(this->vy > 0){
-		time = (1.0 - this->y)/this->vy;
+		time = ((1.0 - this->radius) - this->y)/this->vy;
 	}else if(this->vy < 0){
-		time = -(this->y + 1.0)/this->vy;
+		time = -(this->y + (1.0-this->radius))/this->vy;
 	}else{
 		time = INT_MAX;
 	}

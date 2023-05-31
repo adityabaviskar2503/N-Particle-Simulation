@@ -33,7 +33,7 @@ int compare(Event* event1, Event* event2){
 }
 
 int isValid(Event* event){
-	if(event->particle1->collisions != event->countA || event->particle2->collisions != event->countB){
+	if((event->particle1 != NULL && (event->particle1->collisions != event->countA)) || (event->particle2 != NULL && (event->particle2->collisions != event->countB))){
 		//if collision count of a particle involved in an event changes then it implies some other event intervened and changed the collision count of the particle
 		return 0;
 	}

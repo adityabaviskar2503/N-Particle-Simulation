@@ -25,7 +25,7 @@ void swap(Event** event1, Event** event2) {
 void enqueue(minPQ* queue, Event* event) {
 	if (queue->size == queue->capacity) {
 		// Double the capacity of the queue
-		int newCapacity = queue->capacity * 2;
+		int newCapacity = queue->capacity * (3.0/2.0);
 		Event** newEvents = (Event**)realloc(queue->events, newCapacity * sizeof(Event*));
 		
 		if (newEvents == NULL) {
@@ -36,7 +36,7 @@ void enqueue(minPQ* queue, Event* event) {
 		queue->events = newEvents;
 		queue->capacity = newCapacity;
 	}
-	
+	//printf("%f \n", event->time);
 	int currentIndex = queue->size;
 	int parentIndex = (currentIndex - 1) / 2;
 	
@@ -50,6 +50,31 @@ void enqueue(minPQ* queue, Event* event) {
 	queue->events[currentIndex] = event;
 	queue->size++;
 }
+
+/*void enqueue(minPQ* queue, Event* event) {
+    	if (queue->size == queue->capacity) {
+    	    	// Remove the element at the last index
+    	    	Event* removedEvent = queue->events[queue->size - 1];
+    	    	free(removedEvent);
+
+    	    	// Add the new event at the last index
+    	    	queue->events[queue->size - 1] = event;
+    	}
+
+    	// Rest of the code remains the same
+    	int currentIndex = queue->size;
+    	int parentIndex = (currentIndex - 1) / 2;
+
+    	// Percolate up
+    	while (currentIndex > 0 && event->time < queue->events[parentIndex]->time) {
+    	    	swap(&queue->events[currentIndex], &queue->events[parentIndex]);
+    	    	currentIndex = parentIndex;
+    	    	parentIndex = (currentIndex - 1) / 2;
+    	}
+
+    	queue->events[currentIndex] = event;
+    	queue->size++;
+}*/
 
 Event* dequeue(minPQ* queue) {
 	if (queue->size == 0) {

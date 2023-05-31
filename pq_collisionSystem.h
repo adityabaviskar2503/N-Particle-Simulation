@@ -12,11 +12,11 @@ typedef struct pq_CollisionSystem{
 	double t;
 }pq_CollisionSystem;
 
-void predict(Particle* p, minPQ* pq, particleSystem* sys);
+void predict(Particle* p, minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys);
 
-void redraw(minPQ* pq);
+void redraw(minPQ* pq, pq_CollisionSystem* pq_sys);
 
-void fillPQ(minPQ* pq, particleSystem* sys);
+void fillPQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys);
 
 void updatePQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys);
 

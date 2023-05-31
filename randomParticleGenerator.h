@@ -2,6 +2,9 @@
 #define RANDOM_PARTICLE_GEN_
 
 #include "particle.h"
+#define SPEED_LIMIT 0.02
+#define RADIUS_LO 0.01
+#define RADIUS_HI 0.02
 
 typedef struct particleSystem{
 	Particle* particleArray;

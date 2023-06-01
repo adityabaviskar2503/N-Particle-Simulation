@@ -91,9 +91,12 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 	        	//particles[i].mass = getRandomDouble(0.1,1);
 	        	particles[i].mass = 1;
 	        	particles[i].collisions = 0;
-		        particles[i].color.r = getRandomDouble(0,1);
-		        particles[i].color.g = getRandomDouble(0,1); 
-			particles[i].color.b = getRandomDouble(0,1);
+		        //particles[i].color.r = getRandomDouble(0,1);
+		        particles[i].color.r = 1.0;
+		        //particles[i].color.g = getRandomDouble(0,1); 
+		        particles[i].color.g = 1.0; 
+			//particles[i].color.b = getRandomDouble(0,1);
+			particles[i].color.b = 1.0;
 			int checkOverlapCount = 0;
 	        // Check for overlaps and reassign random values if necessary
 	        	while (checkOverlap(particles, particleCount, i, arrayPos)) {
@@ -129,21 +132,22 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 void printParticles(particleSystem* system) {
     	for (int i = 0; i < system->particleCount; i++) {
         	Particle particle = system->particleArray[i];
-       		printf(" Particle %d:", i + 1);
-       	 	printf(" Radius: %f ", particle.radius);
-       	 	printf(" x: %f ", particle.x);
-       	 	printf(" y: %f ", particle.y);
-       	 	printf(" vx: %f ", particle.vx);
-       	 	printf(" vy: %f ", particle.vy);
-       	 	printf(" Mass: %f ", particle.mass);
-       	 	printf(" Color (r, g, b): (%f, %f, %f) ", particle.color.r, particle.color.g, particle.color.b);
+       		//printf(" Particle %d:", i + 1);
+       	 	printf("%f ", particle.radius);
+       	 	printf("%f ", particle.x);
+       	 	printf("%f ", particle.y);
+       	 	printf("%f ", particle.vx);
+       	 	printf("%f ", particle.vy);
+       	 	printf("%f ", particle.mass);
+       	 	printf("%f %f %f ", particle.color.r, particle.color.g, particle.color.b);
        	 	printf("\n");
     }
 }
 
 //int main(int argc, char* argv[]){
 //	particleSystem* ps;
-//	createRandomSystemFromFile(&ps, argv[1]);
+//	//createRandomSystemFromFile(&ps, argv[1]);
+//	createRandomSystem(&ps, 1280);
 //	printParticles(ps);
 //	return 0;
 //}

@@ -63,7 +63,10 @@ void keyboardFunc(unsigned char key, int x, int y) {
 // Main function
 int main(int argc, char** argv) {
 	pq_sys = malloc(sizeof(pq_CollisionSystem));
-	
+	if(argc != 2){
+		printf("Pass particle count or file name as command line argument!\n");
+		return 0;
+	}
 	int mode = atoi(argv[1]);
 	if(mode == 0){
 		createRandomSystemFromFile(&(pq_sys->sys), argv[1]);
@@ -73,10 +76,10 @@ int main(int argc, char** argv) {
 	pq_sys->pq = createPriorityQueue(40000);
 	pq_sys->t = 0;
 	fillPQ(pq_sys->pq, pq_sys->sys, pq_sys);
-	isPaused = 0;
-//  	for(int i = 0;i<pq_sys->sys->particleCount;i++){
-//		printf("%f ", pq_sys->sys->particleArray[i].radius);
-//	}
+	isPaused = 1;
+  	//for(int i = 0;i<pq_sys->sys->particleCount;i++){
+	//	printf("%f %f\n", pq_sys->sys->particleArray[i].x, pq_sys->sys->particleArray[i].y);
+	//}
 	// Initialize GLUT and create a window
    	glutInit(&argc, argv);
    	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

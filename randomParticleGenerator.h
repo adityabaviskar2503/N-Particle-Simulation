@@ -14,6 +14,8 @@ typedef struct particleSystem{
 
 void createRandomSystem(particleSystem** system, int particleCount);
 
+void createRandomSystemFromFile(particleSystem** system, char* file);
+
 double distance(double x1, double y1, double x2, double y2);
 
 int checkOverlap(Particle* particles, int numParticles, int currentIndex, int arrayPos);

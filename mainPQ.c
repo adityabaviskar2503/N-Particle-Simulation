@@ -6,10 +6,12 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include"pq_collisionSystem.h"
-#define PQ_PARTICLE pq_sys->sys
-int width = 1000, height = 1000;
 
+#define PQ_PARTICLE pq_sys->sys
+
+int width = 1000, height = 1000;
 pq_CollisionSystem* pq_sys;
+char isPaused;
 
 void drawCircle(float r, float x, float y){
 	glBegin(GL_TRIANGLE_FAN);
@@ -27,12 +29,10 @@ void drawScene() {
 	
     	// Draw the particle
     	Particle particle;
-	//printf("%d ", PQ_PARTICLE->particleCount);
     	for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
     		particle = PQ_PARTICLE->particleArray[i];
     		glColor3f(particle.color.r, particle.color.g, particle.color.b);
    		drawCircle(particle.radius, particle.x, particle.y);
-		//printf("%f ", particle.radius);
     	}
     	// Swap buffers
     	glutSwapBuffers();
@@ -41,10 +41,11 @@ void drawScene() {
 // Timer function for ball movement
 void update(int value) {
 	//printf("%d\n",pq_sys->pq->size);
-	updatePQ(pq_sys->pq, pq_sys->sys, pq_sys);
-	 // Redraw the scene
-	//printf("Chutya bada wala\n"); 
-    	glutPostRedisplay();
+	if(!isPaused){
+		updatePQ(pq_sys->pq, pq_sys->sys, pq_sys);
+	 	// Redraw the scene
+    		glutPostRedisplay();
+	}
     	// Set the timer for the next update
     	glutTimerFunc(30, update, value);
 }
@@ -54,15 +55,25 @@ void keyboardFunc(unsigned char key, int x, int y) {
         	// Exit the main loop
         	glutLeaveMainLoop();
     	}
+	if(key == 'p' || key == 'P'){
+		isPaused = !isPaused;
+	}
 }
 
 // Main function
 int main(int argc, char** argv) {
 	pq_sys = malloc(sizeof(pq_CollisionSystem));
-	createRandomSystem(&(pq_sys->sys), 5000);
+	
+	int mode = atoi(argv[1]);
+	if(mode == 0){
+		createRandomSystemFromFile(&(pq_sys->sys), argv[1]);
+	}else{
+		createRandomSystem(&(pq_sys->sys), mode);
+	}
 	pq_sys->pq = createPriorityQueue(40000);
 	pq_sys->t = 0;
 	fillPQ(pq_sys->pq, pq_sys->sys, pq_sys);
+	isPaused = 0;
 //  	for(int i = 0;i<pq_sys->sys->particleCount;i++){
 //		printf("%f ", pq_sys->sys->particleArray[i].radius);
 //	}
@@ -86,7 +97,6 @@ int main(int argc, char** argv) {
  	glutKeyboardFunc(keyboardFunc);
  	
 	// Start the main loop
-//	printf("Chutya\n");
 	glutMainLoop();
 /*	int count = 0;
 	while (pq_sys->pq->size > 0) {

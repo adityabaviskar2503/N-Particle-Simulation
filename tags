@@ -24,9 +24,9 @@ N-Particle-Simulation	README.md	/^# N-Particle-Simulation$/;"	c
 OBJECT	Makefile	/^OBJECT = $(subst .c,.o,$(SOURCE))$/;"	m
 PARTICLE_H_	particle.h	/^#define PARTICLE_H_$/;"	d
 PQ_COL_SYS	pq_collisionSystem.h	/^#define PQ_COL_SYS$/;"	d
-PQ_PARTICLE	main.c	/^#define PQ_PARTICLE /;"	d	file:
 Particle	particle.h	/^typedef struct Particle{$/;"	s
 Particle	particle.h	/^} Particle;$/;"	t	typeref:struct:Particle
+QT	qt_main.c	/^quadtree_node* QT;$/;"	v	typeref:typename:quadtree_node *
 QUADTREE_H_	quadtree.h	/^#define QUADTREE_H_$/;"	d
 RANDOM_PARTICLE_GEN_	randomParticleGenerator.h	/^#define RANDOM_PARTICLE_GEN_$/;"	d
 SIM	Makefile	/^SIM  = sim$/;"	m
@@ -34,6 +34,7 @@ SOURCE	Makefile	/^SOURCE = $(wildcard *.c)$/;"	m
 This is our DSA-2 2nd year project	README.md	/^## This is our DSA-2 2nd year project$/;"	s	chapter:N-Particle-Simulation
 arr	minPQ.h	/^	int* arr;$/;"	m	struct:minPQ	typeref:typename:int *
 b	particle.h	/^	float r,g,b;$/;"	m	struct:Colour	typeref:typename:float
+bounceOff	quadtree.h	/^void bounceOff(Particle* p1, Particle* p2){$/;"	f	typeref:typename:void
 capacity	minPQ.h	/^	int capacity;$/;"	m	struct:minPQ	typeref:typename:int
 checkOverlap	randomParticleGenerator.c	/^int checkOverlap(Particle* particles, int numParticles, int currentIndex, int arrayPos) {$/;"	f	typeref:typename:int
 children	quadtree.h	/^    struct quadtree_node* children[4];$/;"	m	struct:quadtree_node	typeref:struct:quadtree_node * [4]
@@ -42,24 +43,32 @@ clean	Makefile	/^clean:$/;"	t
 collisions	particle.h	/^	int collisions;$/;"	m	struct:Particle	typeref:typename:int
 color	particle.h	/^	Color color;$/;"	m	struct:Particle	typeref:typename:Color
 compare	event.c	/^int compare(Event* event1, Event* event2){$/;"	f	typeref:typename:int
+correct_quadtree	quadtree.h	/^bool correct_quadtree(quadtree_node* node){$/;"	f	typeref:typename:bool
 countA	event.h	/^	int countA, countB; \/\/collision count of particles at the time of event creation, will be use/;"	m	struct:Event	typeref:typename:int
 countB	event.h	/^	int countA, countB; \/\/collision count of particles at the time of event creation, will be use/;"	m	struct:Event	typeref:typename:int
 createRandomSystem	randomParticleGenerator.c	/^void createRandomSystem(particleSystem** system, int particleCount){$/;"	f	typeref:typename:void
 createquadtree_node	quadtree.h	/^quadtree_node* createquadtree_node(double x, double y, double width, double height) {$/;"	f	typeref:typename:quadtree_node *
+destroyQuadtree	quadtree.h	/^void destroyQuadtree(quadtree_node* node) {$/;"	f	typeref:typename:void
+detectCollisionQuadtree	quadtree.h	/^void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){$/;"	f	typeref:typename:void
+display_QT	quadtree.h	/^void display_QT(quadtree_node* node){$/;"	f	typeref:typename:void
 distance	randomParticleGenerator.c	/^double distance(double x1, double y1, double x2, double y2) {$/;"	f	typeref:typename:double
+distanceParticles	quadtree.h	/^double distanceParticles(Particle* p1, Particle* p2){$/;"	f	typeref:typename:double
 divideAndAssignParticles	randomParticleGenerator.c	/^void divideAndAssignParticles(int particleCount, double left, double right, double bottom, doubl/;"	f	typeref:typename:void
-drawCircle	main.c	/^void drawCircle(float r, float x, float y){$/;"	f	typeref:typename:void
-drawScene	main.c	/^void drawScene() {$/;"	f	typeref:typename:void
+drawCircle	qt_main.c	/^void drawCircle(float r, float x, float y){$/;"	f	typeref:typename:void
+drawScene	qt_main.c	/^void drawScene() {$/;"	f	typeref:typename:void
 g	particle.h	/^	float r,g,b;$/;"	m	struct:Colour	typeref:typename:float
+getParticleCountRegion	quadtree.h	/^int getParticleCountRegion(quadtree_node* node){$/;"	f	typeref:typename:int
 getRandomDouble	randomParticleGenerator.c	/^double getRandomDouble(double min, double max) {$/;"	f	typeref:typename:double
-height	main.c	/^int width = 1000, height = 1000;$/;"	v	typeref:typename:int
+handle_collision	quadtree.h	/^void handle_collision(Particle* p1, Particle* p2){$/;"	f	typeref:typename:void
+height	qt_main.c	/^int width = 1000, height = 1000;$/;"	v	typeref:typename:int
 height	quadtree.h	/^    double height;$/;"	m	struct:quadtree_node	typeref:typename:double
-insertParticle	quadtree.h	/^void insertParticle(quadtree_node* node, Particle* particle) {$/;"	f	typeref:typename:void
+insertParticleQuadtree	quadtree.h	/^void insertParticleQuadtree(quadtree_node** node, Particle* particle) {$/;"	f	typeref:typename:void
 isCuttingRegion	quadtree.h	/^bool isCuttingRegion(double Cx, double Cy, double Rx, double Ry, double radius, double width, do/;"	f	typeref:typename:bool
-isLeafNode	quadtree.h	/^bool isLeafNode(quadtree_node* node) {$/;"	f	typeref:typename:bool
+isLeafNode	quadtree.h	/^bool isLeafNode(quadtree_node** node) {$/;"	f	typeref:typename:bool
+isOverlappingParticles	quadtree.h	/^bool isOverlappingParticles(Particle* p1, Particle* p2){$/;"	f	typeref:typename:bool
 isValid	event.c	/^int isValid(Event* event){$/;"	f	typeref:typename:int
-keyboardFunc	main.c	/^void keyboardFunc(unsigned char key, int x, int y) {$/;"	f	typeref:typename:void
-main	main.c	/^int main(int argc, char** argv) {	$/;"	f	typeref:typename:int
+keyboardFunc	qt_main.c	/^void keyboardFunc(unsigned char key, int x, int y) {$/;"	f	typeref:typename:void
+main	qt_main.c	/^int main(int argc, char** argv) {	$/;"	f	typeref:typename:int
 mass	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
 minPQ	minPQ.h	/^typedef struct minPQ{$/;"	s
 minPQ	minPQ.h	/^}minPQ;$/;"	t	typeref:struct:minPQ
@@ -68,30 +77,34 @@ newEvent	event.c	/^Event* newEvent(double time, char type, Particle* particle1, 
 newParticle	particle.c	/^Particle* newParticle(double x, double y, double vx, double vy, double radius, double mass, Colo/;"	f	typeref:typename:Particle *
 particle1	event.h	/^	Particle *particle1, *particle2; \/\/pointers to particles involved in the event$/;"	m	struct:Event	typeref:typename:Particle *
 particle2	event.h	/^	Particle *particle1, *particle2; \/\/pointers to particles involved in the event$/;"	m	struct:Event	typeref:typename:Particle *
+particleAlreadyExists	quadtree.h	/^bool particleAlreadyExists(quadtree_node* node, Particle* particle){$/;"	f	typeref:typename:bool
 particleArray	randomParticleGenerator.h	/^	Particle* particleArray;$/;"	m	struct:particleSystem	typeref:typename:Particle *
 particleCount	randomParticleGenerator.h	/^	int particleCount;$/;"	m	struct:particleSystem	typeref:typename:int
 particleSystem	randomParticleGenerator.h	/^typedef struct particleSystem{$/;"	s
 particleSystem	randomParticleGenerator.h	/^}particleSystem;$/;"	t	typeref:struct:particleSystem
 particle_count	quadtree.h	/^    int particle_count;$/;"	m	struct:quadtree_node	typeref:typename:int
-particles	quadtree.h	/^    Particle particles[MAX_PARTICLES];$/;"	m	struct:quadtree_node	typeref:typename:Particle[]
+particles	quadtree.h	/^    Particle* particles[MAX_PARTICLES];$/;"	m	struct:quadtree_node	typeref:typename:Particle * []
 pq	pq_collisionSystem.h	/^	minPQ* pq;$/;"	m	struct:pq_CollisionSystem	typeref:typename:minPQ *
 pq_CollisionSystem	pq_collisionSystem.h	/^typedef struct pq_CollisionSystem{$/;"	s
 pq_CollisionSystem	pq_collisionSystem.h	/^}pq_CollisionSystem;$/;"	t	typeref:struct:pq_CollisionSystem
-pq_sys	main.c	/^pq_CollisionSystem pq_sys;$/;"	v	typeref:typename:pq_CollisionSystem
+propagate_sys	quadtree.h	/^void propagate_sys(particleSystem* qt_sys, double dt){$/;"	f	typeref:typename:void
+qt_sys	qt_main.c	/^particleSystem* qt_sys;$/;"	v	typeref:typename:particleSystem *
 quadtree_node	quadtree.h	/^typedef struct quadtree_node{$/;"	s
 quadtree_node	quadtree.h	/^}quadtree_node;$/;"	t	typeref:struct:quadtree_node
 r	particle.h	/^	float r,g,b;$/;"	m	struct:Colour	typeref:typename:float
 radius	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
+reverse_at_boundry	quadtree.h	/^void reverse_at_boundry(particleSystem* qt_sys){$/;"	f	typeref:typename:void
 run	Makefile	/^run: $(OBJECT)$/;"	t
 subdivideNode	quadtree.h	/^void subdivideNode(quadtree_node* node) {$/;"	f	typeref:typename:void
 sys	pq_collisionSystem.h	/^	particleSystem* sys;$/;"	m	struct:pq_CollisionSystem	typeref:typename:particleSystem *
 t	pq_collisionSystem.h	/^	double t;$/;"	m	struct:pq_CollisionSystem	typeref:typename:double
 time	event.h	/^	double time; \/\/time for event to occur$/;"	m	struct:Event	typeref:typename:double
 type	event.h	/^	char type; \/\/type of event i.e. particle-particle ,particle-wall etc.$/;"	m	struct:Event	typeref:typename:char
-update	main.c	/^void update(int value) {$/;"	f	typeref:typename:void
+update	qt_main.c	/^void update(int value) {$/;"	f	typeref:typename:void
+updateQuadtree	quadtree.h	/^void updateQuadtree(quadtree_node** node, quadtree_node** root) {$/;"	f	typeref:typename:void
 vx	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
 vy	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
-width	main.c	/^int width = 1000, height = 1000;$/;"	v	typeref:typename:int
+width	qt_main.c	/^int width = 1000, height = 1000;$/;"	v	typeref:typename:int
 width	quadtree.h	/^    double width;$/;"	m	struct:quadtree_node	typeref:typename:double
 x	particle.h	/^	double x,y,vx,vy,radius,mass;$/;"	m	struct:Particle	typeref:typename:double
 x	quadtree.h	/^    double x;$/;"	m	struct:quadtree_node	typeref:typename:double

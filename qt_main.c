@@ -46,29 +46,20 @@ void drawCircle(float r, float x, float y){
 }
 
 // Timer function for ball movement
-void update(int value) {
+void update() {
     // Update the ball position
-//    Particle particle;
-//    double ballRadius;// ballX, ballY, ballXSpeed, ballYSpeed
-//    for(int i = 0 ; i < PQ_PARTICLE->particleCount ; i++){
-//        particle = PQ_PARTICLE->particleArray[i];
-//        ballRadius = particle.radius;
-//        PQ_PARTICLE->particleArray[i].x += particle.vx;
-//        PQ_PARTICLE->particleArray[i].y += particle.vy;
-//        // Check for collision with window edges
-//        if (PQ_PARTICLE->particleArray[i].x > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].x < -1.0f + ballRadius) {
-//            PQ_PARTICLE->particleArray[i].vx = -particle.vx;
-//        }
-//        if (PQ_PARTICLE->particleArray[i].y > 1.0f - ballRadius || PQ_PARTICLE->particleArray[i].y < -1.0f + ballRadius) {
-//            PQ_PARTICLE->particleArray[i].vy = -particle.vy;
-//        } 	
-//
-//    }
 
-    //propagate(&QT, 1);
-    propagate_sys(qt_sys, 1);
-    reverse_at_boundry(qt_sys, &QT);
-    updateQuadtree(&QT, &QT);
+
+    propagate_sys(qt_sys, 1.0);
+    reverse_at_boundry(qt_sys);
+    clearQuadtree(QT);
+    QT = createquadtree_node(0, 0, 2, 2);
+    for(int i = 0 ; i < qt_sys->particleCount ; i++){
+        insertParticleQuadtree(&QT, &(qt_sys->particleArray[i]));
+    }
+    //updateQuadtree(&QT, &QT);
+    if(!correct_quadtree(QT))
+        printf("WRONG quadtree\n");
     detectCollisionQuadtree(qt_sys, &QT);  
 
 //    printf("\n");
@@ -93,7 +84,7 @@ void keyboardFunc(unsigned char key, int x, int y) {
 int main(int argc, char** argv) {	
 	//createRandomSystem(&(pq_sys.sys), 200);
     QT = createquadtree_node(0, 0, 2, 2);
-	createRandomSystem(&(qt_sys), 5);
+	createRandomSystem(&(qt_sys), 120);
     printf("particle array size id: %d\n",qt_sys->particleCount);
     for(int i = 0 ; i < qt_sys->particleCount ; i++){
     	//particle = qt_sys->particleArray[i];

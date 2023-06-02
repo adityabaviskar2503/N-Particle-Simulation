@@ -5,7 +5,7 @@
 #include <math.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
-#define MAX_PARTICLES 5
+#define MAX_PARTICLES 3
 
 typedef struct quadtree_node{
     double x;
@@ -112,7 +112,7 @@ void insertParticleQuadtree(quadtree_node** node, Particle* particle) {
     }
 
     // Add the particle to the node's particle array
-    if ((*node)->particle_count < MAX_PARTICLES && (! particleAlreadyExists(*node, particle))) {
+    if ((*node)->particle_count < MAX_PARTICLES /*&& (! particleAlreadyExists(*node, particle))*/) {
         (*node)->particles[(*node)->particle_count] = particle;
         (*node)->particle_count++;
         //printf("inserted point %lf, %lf\n",((*node)->particles[(*node)->particle_count++])->x,((*node)->particles[(*node)->particle_count++])->y);
@@ -167,54 +167,142 @@ void propagate_sys(particleSystem* qt_sys, double dt){
     }
 }
 
-void reverse_at_boundry(particleSystem* qt_sys, quadtree_node** node){
-    //if (isLeafNode(&node)) {
-    if ((*node)->children[0] == NULL) {
-        //printf("ithe alo\n");
-        for (int i = 0; i < (*node)->particle_count; i++) {
-            Particle* particle = (*node)->particles[i];
+void reverse_at_boundry(particleSystem* qt_sys){
+    for (int i = 0; i < qt_sys->particleCount; i++) {
+        Particle* particle = &(qt_sys->particleArray[i]);
 
-            double left_gap = particle->x - particle->radius + 1;
-            double right_gap = 1 - particle->x - particle->radius;
-            double bottom_gap = particle->y - particle->radius + 1;
-            double top_gap = 1 - particle->y - particle->radius;
+        double left_gap = particle->x - particle->radius + 1;
+        double right_gap = 1 - particle->x - particle->radius;
+        double bottom_gap = particle->y - particle->radius + 1;
+        double top_gap = 1 - particle->y - particle->radius;
 
-            if(left_gap < 0 && particle->vx < 0){
-                //propagate_sys(qt_sys, left_gap / (particle->vx));
-                particle->vx *= -1;
-            }
-
-            else if(right_gap < 0 && particle->vx > 0){
-                //propagate_sys(qt_sys, right_gap / (particle->vx));
-                particle->vx *= -1;
-            }
-
-            else if(bottom_gap < 0 && particle->vy < 0){
-                //propagate_sys(qt_sys, bottom_gap / (particle->vy));
-                particle->vy *= -1;
-            }
-
-            else if(top_gap < 0 && particle->vy > 0){
-                //propagate_sys(qt_sys, top_gap / (particle->vy));
-                particle->vy *= -1;
-            }
-
+        if(left_gap < 0 && particle->vx < 0){
+            //propagate_sys(qt_sys, left_gap / (particle->vx));
+            particle->vx *= -1;
+            //propagate_sys(qt_sys, -left_gap / (particle->vx));
         }
-    } 
-    else {
-        for (int i = 0; i < 4; i++) {
-            reverse_at_boundry(qt_sys, &(*node)->children[i]);
+
+        else if(right_gap < 0 && particle->vx > 0){
+            //propagate_sys(qt_sys, right_gap / (particle->vx));
+            particle->vx *= -1;
+            //propagate_sys(qt_sys, -right_gap / (particle->vx));
         }
+
+        if(bottom_gap < 0 && particle->vy < 0){
+            //propagate_sys(qt_sys, bottom_gap / (particle->vy));
+            particle->vy *= -1;
+            //propagate_sys(qt_sys, -bottom_gap / (particle->vy));
+        }
+
+        else if(top_gap < 0 && particle->vy > 0){
+            //propagate_sys(qt_sys, top_gap / (particle->vy));
+            particle->vy *= -1;
+            //propagate_sys(qt_sys, -top_gap / (particle->vy));
+        }
+
     }
+
 }
 
 
-void updateQuadtree(quadtree_node** node, quadtree_node** root) {
-    if (*node == NULL) {
+
+void destroyQuadtree(quadtree_node* node) {
+    if (node == NULL) {
         return;
     }
 
-    if ((*node)->children[0] == NULL) {
+    // Recursively destroy the children nodes
+    for (int i = 0; i < 4; i++) {
+        destroyQuadtree(node->children[i]);
+    }
+
+    // Free the memory allocated for the particle array
+    for (int i = 0; i < node->particle_count; i++) {
+        node->particles[i] = NULL;
+    }
+
+    // Free the memory allocated for the current node
+    free(node);
+}
+
+void clearQuadtree(quadtree_node* node){
+    for(int i = 0; i < 4; i++){
+        destroyQuadtree(node->children[i]);
+    }
+
+    for (int i = 0; i < node->particle_count; i++) {
+        node->particles[i] = NULL;
+    }
+}
+
+int getParticleCountRegion(quadtree_node* node){
+    if(node == NULL){
+        return 0;
+    }
+
+    if(node->children[0] == NULL){
+        return node->particle_count;
+    }
+
+    int count = 0;
+    for(int i = 0; i < 4; i++){
+        count += getParticleCountRegion(node->children[i]);
+    }
+    return count;
+}
+
+//void updateQuadtree(quadtree_node** node, quadtree_node** root) {
+//    if (*node == null) {
+//        return;
+//    }
+//
+//    if ((*node)->children[0] == null) {
+//        for (int i = 0; i < (*node)->particle_count; i++) {
+//            particle* particle = (*node)->particles[i];
+//            if (!particle) {
+//                break;
+//            }
+//
+//            if (! iscuttingregion(particle->x, particle->y, (*node)->x, (*node)->y, particle->radius, (*node)->width, (*node)->height)) {
+//                (*node)->particles[i] = (*node)->particles[(*node)->particle_count - 1];
+//                (*node)->particles[(*node)->particle_count - 1] = null;
+//                (*node)->particle_count --;
+//                insertparticlequadtree(root, particle);
+//            }
+//        }
+//        return;
+//    }
+//
+//    if(getparticlecountregion(*node) == 0){
+//        destroyquadtree(*node);
+//    }
+//    else{
+//        updatequadtree(&(*node)->children[0], root);
+//        updatequadtree(&(*node)->children[1], root);
+//        updatequadtree(&(*node)->children[2], root);
+//        updatequadtree(&(*node)->children[3], root);
+//    }
+//}
+void updateQuadtree(quadtree_node** node, quadtree_node** root) {
+//    if (*node == NULL) {
+//        return;
+//    }
+//
+//    if ((*node)->children[0] != NULL) {
+//
+//        if(getParticleCountRegion(*node) == 0){
+//            for(int i = 0; i < 4; i++){
+//                destroyQuadtree((*node)->children[i]);
+//            }
+//            //destroyquadtree(*node);
+//        }
+//        updateQuadtree(&(*node)->children[0], root);
+//        updateQuadtree(&(*node)->children[1], root);
+//        updateQuadtree(&(*node)->children[2], root);
+//        updateQuadtree(&(*node)->children[3], root);
+//    }
+//
+//    else if ((*node)->children[0] == NULL) {
         for (int i = 0; i < (*node)->particle_count; i++) {
             Particle* particle = (*node)->particles[i];
             if (!particle) {
@@ -229,27 +317,9 @@ void updateQuadtree(quadtree_node** node, quadtree_node** root) {
             }
         }
         return;
-    }
+    
 
-    for(int i = 0; i < 4; i++){
-        bool empty_region_flag = true;
-        for(int j = 0; j < 4; j++){
-            if(((*node)->children[i])->particle_count == 0)
-                empty_region_flag = false;
-        }
-        if(empty_region_flag){
-            for(int j = 0; j < 4; j++)
-                ((*node)->children[i])->children[j] = NULL;
-        }
-        else
-            updateQuadtree(&(*node)->children[i], root);
-    }
-//    updateQuadtree(&(*node)->children[0], root);
-//    updateQuadtree(&(*node)->children[1], root);
-//    updateQuadtree(&(*node)->children[2], root);
-//    updateQuadtree(&(*node)->children[3], root);
 }
-
 bool isOverlappingParticles(Particle* p1, Particle* p2){
     double dx = p1->x - p2->x;
     double dy = p1->y - p2->y;
@@ -263,6 +333,48 @@ double distanceParticles(Particle* p1, Particle* p2){
     double distance = sqrt(dx * dx + dy * dy ); 
     return distance;
 }
+
+//double approachVelocityQuadtree(Particle* p1, Particle* p2){
+//    double dvx = p2->vx - p1->vx;
+//    double dvy = p2->vy - p1->vy;
+//    double drx = (p2->x - p1->x) * 1000;
+//    double dry = (p2->y - p1->y) * 1000;
+//    double dr_mag = sqrt(drx * drx + dry * dry);
+//    printf("mag is %lf\n",dr_mag);
+//    if(dr_mag == 0){
+//        return 0;
+//    }
+//
+//    double dvx_approach = dvx * drx;
+//    double dvy_approach = dvy * dry;
+//    double speed = sqrt(dvx_approach * dvx_approach + dvy_approach * dvy_approach) / dr_mag;
+//}
+
+//void handle_collision(Particle* p1, Particle* p2, particleSystem* qt_sys){
+//    double dx = p1->x - p2->x; 
+//    double dy = p1->y - p2->y; 
+//    double dvx = p1->vx - p2->vx; 
+//    double dvy = p1->vy - p2->vy; 
+//    double rel_speed = dx * dvx + dy + dvy;
+//    double dt = distanceParticles(p1, p2) / rel_speed;
+//    
+////    p1->x += -1 * p1->vx * dt;
+////    p1->y += -1 * p1->vy * dt;
+////    p2->x += -1 * p2->vx * dt;
+////    p2->y += -1 * p2->vy * dt;
+//    //propagate_sys(qt_sys, -dt);
+//
+//    double m1 = p1->mass, m2 = p2->mass;
+//    double vx1 = p1->vx, vx2 = p2->vx;
+//    double vy1 = p1->vy, vy2 = p2->vy;
+//    p1->vx = ((m1 - m2) * vx1 + 2 * m2 * vx2) / (m1 + m2);
+//    p1->vy = ((m1 - m2) * vy1 + 2 * m2 * vy2) / (m1 + m2);
+//    p2->vx = ((m2 - m1) * vx2 + 2 * m1 * vx1) / (m1 + m2);
+//    p2->vy = ((m2 - m1) * vy2 + 2 * m1 * vy1) / (m1 + m2);
+//    //propagate_sys(qt_sys, dt);
+//
+//    }
+
 void bounceOff(Particle* p1, Particle* p2){
 	double dx = p2->x - p1->x; 
 	double dy = p2->y - p1->y;
@@ -281,19 +393,43 @@ void bounceOff(Particle* p1, Particle* p2){
 	p2->collisions++;
 }
 
-//double approachVelocityQuadtree(Particle* p1, Particle* p2){
-//    double dvx = p2->vx - p1->vx;
-//    double dvy = p2->vy - p1->vy;
-//    double drx = p2->x - p1->x;
-//    double dry = p2->y - p1->y;
-//    double dr_mag = sqrt(drx * drx + dry * dry);
-//    printf("mag is %lf\n",dr_mag);
-//    printf("square of mag is %lf\n",drx * drx + dry * dry);
-//
-//    double dvx_approach = dvx * drx;
-//    double dvy_approach = dvy * dry;
-//    double speed = sqrt(dvx_approach * dvx_approach + dvy_approach * dvy_approach) / dr_mag;
-//}
+
+bool correct_quadtree(quadtree_node* node){
+    if(node->children[0] == NULL){
+        bool result = true;
+        for(int i = 0; i < node->particle_count; i++){
+            Particle* particle = node->particles[i];
+            result = result && isCuttingRegion(particle->x, particle->y, node->x, node->y, particle->radius, node->width, node->height);
+        }
+        return result;
+    }
+
+    bool result = true;
+    for(int i = 0; i < 4; i++){
+        result = result && correct_quadtree(node->children[0]);
+    }
+    return result;
+}
+
+void handle_collision(Particle* p1, Particle* p2, particleSystem* qt_sys){
+    double dx = p1->x - p2->x; 
+    double dy = p1->y - p2->y; 
+    double distance = distanceParticles(p1, p2);
+    double collision_normal_x = dx / distance;
+    double collision_normal_y = dy / distance;
+    double vx_rel = p2->vx - p1->vx;
+    double vy_rel = p2->vy - p1->vy;
+    double impact_vel = vx_rel * collision_normal_x + vy_rel * collision_normal_y;
+    if(impact_vel > 0){
+        double M = p2->mass + p1->mass;
+        //double impulse = (2 * impact_vel) / (mass_ratio + 1);
+        p1->vx += (2 * p2->mass / M) * impact_vel * collision_normal_x ;
+        p1->vy += (2 * p2->mass / M) * impact_vel * collision_normal_y ;
+        p2->vx -= (2 * p1->mass / M) * impact_vel * collision_normal_x ;
+        p2->vy -= (2 * p1->mass / M) * impact_vel * collision_normal_y ;
+    }
+   
+}
 
 void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){
     if((*node)->children[0] == NULL){
@@ -304,7 +440,12 @@ void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){
                 double distance = distanceParticles(p1, p2);
                 if(distance <= p1->radius + p2->radius){
                     printf("overlap detected\n");
+                    handle_collision(p1, p2, qt_sys);
+                    
                 }
+//                if (distance == p1->radius + p2->radius){
+//                    bounceOff(p1, p2);
+//                }
                     
             }
         }

@@ -3,6 +3,11 @@
 
 #include "particle.h"
 
+#define LEFT_BOUNDARY -100
+#define RIGHT_BOUNDARY 100
+#define BOTTOM_BOUNDARY -100
+#define TOP_BOUNDARY 100
+
 typedef struct particleSystem{
 	Particle* particleArray;
 	int particleCount;

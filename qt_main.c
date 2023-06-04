@@ -53,7 +53,8 @@ void update() {
     propagate_sys(qt_sys, 0.5);
     reverse_at_boundry(qt_sys);
     clearQuadtree(QT);
-    QT = createquadtree_node(0, 0, 2, 2);
+    //QT = createquadtree_node(0, 0, 2, 2);
+    QT = createquadtree_node(0, 0, RIGHT_BOUNDARY - LEFT_BOUNDARY, TOP_BOUNDARY - BOTTOM_BOUNDARY);
     for(int i = 0 ; i < qt_sys->particleCount ; i++){
         insertParticleQuadtree(&QT, &(qt_sys->particleArray[i]));
     }
@@ -78,10 +79,10 @@ void keyboardFunc(unsigned char key, int x, int y) {
 
 // Main function
 int main(int argc, char* argv[]) {	
-    QT = createquadtree_node(0, 0, 2, 2);
+    QT = createquadtree_node(0, 0, RIGHT_BOUNDARY - LEFT_BOUNDARY, TOP_BOUNDARY - BOTTOM_BOUNDARY);
 
     if(argc == 1){
-	    createRandomSystem(&(qt_sys), 500);
+	    createRandomSystem(&(qt_sys), 700);
     }
     else if(argc == 2){
         createRandomSystemFromFile(&(qt_sys), argv[1]);
@@ -111,7 +112,7 @@ int main(int argc, char* argv[]) {
  	// Set the projection
  	glMatrixMode(GL_PROJECTION);
  	glLoadIdentity();
- 	gluOrtho2D(-1.0f, 1.0f, -1.0f, 1.0f);
+ 	gluOrtho2D(-100.0f, 100.0f, -100.0f, 100.0f);
  	   
  	// Set the display function and timer
  	glutDisplayFunc(drawScene);

@@ -5,7 +5,7 @@
 #include <math.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
-#define MAX_PARTICLES 20
+#define MAX_PARTICLES 10
 
 typedef struct quadtree_node{
     double x;
@@ -171,10 +171,10 @@ void reverse_at_boundry(particleSystem* qt_sys){
     for (int i = 0; i < qt_sys->particleCount; i++) {
         Particle* particle = &(qt_sys->particleArray[i]);
 
-        double left_gap = particle->x - particle->radius + 1;
-        double right_gap = 1 - particle->x - particle->radius;
-        double bottom_gap = particle->y - particle->radius + 1;
-        double top_gap = 1 - particle->y - particle->radius;
+        double left_gap = particle->x - particle->radius - LEFT_BOUNDARY;
+        double right_gap = RIGHT_BOUNDARY - particle->x - particle->radius;
+        double bottom_gap = particle->y - particle->radius - BOTTOM_BOUNDARY;
+        double top_gap = TOP_BOUNDARY - particle->y - particle->radius;
 
         if(left_gap < 0 && particle->vx < 0){
             //propagate_sys(qt_sys, left_gap / (particle->vx));

@@ -21,24 +21,6 @@ void drawCircle(float r, float x, float y){
 	glEnd();
 }
 
-void drawKDTree(kdtree root) {
-	if (root == NULL)
-		return;
-	drawKDTree(root->left);
-	glColor3f(root->ball.color.r, root->ball.color.g, root->ball.color.b);
-	drawCircle(root->ball.radius, root->ball.x, root->ball.y);
-	drawKDTree(root->right);
-	return;
-}
-
-void move_particles(kdtree root,double k){
-	if(root == NULL) return;
-	//UPDATING AND COLLISION HANDELLING
-	move(&(root->ball),k);
-	move_particles(root->left,k);
-	move_particles(root->right,k);
-}
-
 void  particle_collision_render(kdtree root){
 	if(root == NULL) return;
 
@@ -54,86 +36,14 @@ void  particle_collision_render(kdtree root){
 	particle_collision_render(root->right);
 }
 
-void update_particles_boundary(kdtree root){
-	if(!root) return ;
-	
-	double left_gap = root->ball.x - root->ball.radius + 1;
-        double right_gap = 1 - root->ball.x - root->ball.radius;
-        double bottom_gap = root->ball.y - root->ball.radius + 1;
-        double top_gap = 1 - root->ball.y - root->ball.radius;
-
-	if(left_gap < 0 && root->ball.vx < 0){
-            //propagate_sys(qt_sys, left_gap / (root->ball.vx));
-            root->ball.vx *= -1;
-            //propagate_sys(qt_sys, -left_gap / (root->ball.vx));
-        }
-
-        else if(right_gap < 0 && root->ball.vx > 0){
-            //propagate_sys(qt_sys, right_gap / (root->ball.vx));
-            root->ball.vx *= -1;
-            //propagate_sys(qt_sys, -right_gap / (root->ball.vx));
-        }
-
-        if(bottom_gap < 0 && root->ball.vy < 0){
-            //propagate_sys(qt_sys, bottom_gap / (root->ball.vy));
-            root->ball.vy *= -1;
-            //propagate_sys(qt_sys, -bottom_gap / (root->ball.vy));
-        }
-
-        else if(top_gap < 0 && root->ball.vy > 0){
-            //propagate_sys(qt_sys, top_gap / (root->ball.vy));
-            root->ball.vy *= -1;
-            //propagate_sys(qt_sys, -top_gap / (root->ball.vy));
-        }
-	
-	update_particles_boundary(root->left);
-	update_particles_boundary(root->right);
-
-}
-
-void propagate_sys(particleSystem* qt_sys, double dt){
-    for(int i = 0; i < qt_sys->particleCount; i++){
-        Particle* particle = &(qt_sys->particleArray)[i];
-        particle->x += particle->vx * dt;
-        particle->y += particle->vy * dt;
-    }
-}
-
-void reverse_at_boundry(particleSystem* qt_sys){
-    for (int i = 0; i < qt_sys->particleCount; i++) {
-        Particle* particle = &(qt_sys->particleArray[i]);
-
-        double left_gap = particle->x - particle->radius + 1;
-        double right_gap = 1 - particle->x - particle->radius;
-        double bottom_gap = particle->y - particle->radius + 1;
-        double top_gap = 1 - particle->y - particle->radius;
-
-        if(left_gap < 0 && particle->vx < 0){
-            //propagate_sys(qt_sys, left_gap / (particle->vx));
-            particle->vx *= -1;
-            //propagate_sys(qt_sys, -left_gap / (particle->vx));
-        }
-
-        else if(right_gap < 0 && particle->vx > 0){
-            //propagate_sys(qt_sys, right_gap / (particle->vx));
-            particle->vx *= -1;
-            //propagate_sys(qt_sys, -right_gap / (particle->vx));
-        }
-
-        if(bottom_gap < 0 && particle->vy < 0){
-            //propagate_sys(qt_sys, bottom_gap / (particle->vy));
-            particle->vy *= -1;
-            //propagate_sys(qt_sys, -bottom_gap / (particle->vy));
-        }
-
-        else if(top_gap < 0 && particle->vy > 0){
-            //propagate_sys(qt_sys, top_gap / (particle->vy));
-            particle->vy *= -1;
-            //propagate_sys(qt_sys, -top_gap / (particle->vy));
-        }
-
-    }
-
+void drawKDTree(kdtree root) {
+	if (root == NULL)
+		return;
+	drawKDTree(root->left);
+	glColor3f(root->ball.color.r, root->ball.color.g, root->ball.color.b);
+	drawCircle(root->ball.radius, root->ball.x, root->ball.y);
+	drawKDTree(root->right);
+	return;
 }
 
 void drawScene() {
@@ -172,7 +82,7 @@ void keyboardFunc(unsigned char key, int x, int y) {
 // Main function
 int main(int argc, char** argv) {	
 	
-	createRandomSystem(&(kd_sys.sys), 10);
+	createRandomSystem(&(kd_sys.sys), 50);
 	kd_sys.tree = createKDTree(KD_PARTICLE->particleArray,0,KD_PARTICLE->particleCount-1,0);
 	
 //	displayKDTree(kd_sys.tree);

@@ -1,13 +1,13 @@
 #ifndef RANDOM_PARTICLE_GEN_
 #define RANDOM_PARTICLE_GEN_
 
-#include "particle.h"
+#include"../include/KD_Helping_func.h"
 
 typedef struct particleSystem{
 	Particle* particleArray;
 	int particleCount;
-	//double t;
 }particleSystem;
+
 
 void createRandomSystem(particleSystem** system, int particleCount);
 

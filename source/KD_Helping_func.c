@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include "../include/particle.h"
 #include "../include/KD_Helping_func.h"
 
 kdtree createNode(Particle point){
@@ -86,3 +85,36 @@ void quickSort_xy(Particle array[], int low, int high, int*flag) {
 double calculateDistance(Particle p1,Particle p2){
 	return ( pow( (p1.x - p2.x), 2)  + pow( (p1.y - p2.y),2 ) );
 }
+
+// function to print array elements
+void printArray(Particle array[], int size) {
+	for (int i = 0; i < size; ++i) {
+		printf(" x = %lf \t y = %lf \n", array[i].x,array[i].y);
+	}
+}
+
+//Inorder Traversal 
+//@param - tree
+void displayKDTree(kdtree root) {
+	if (root == NULL)
+		return;
+
+	displayKDTree(root->left);
+	printf("%.2f\t%.2f\t%.2f\n", root->ball.x, root->ball.y,root->ball.color.r);
+	displayKDTree(root->right);
+	return;
+}
+
+//Preorder Trraversal
+//@param - tree
+void Pre_order(kdtree root) {
+	if (root == NULL)
+		return;
+
+	printf("(%.2f, %.2f)\n", root->ball.x, root->ball.y);
+	Pre_order(root->left);
+	Pre_order(root->right);
+	return;
+}
+
+

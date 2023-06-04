@@ -1,6 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include"randomParticleGenerator.h"
+#include"../include/randomParticleGenerator.h"
 #include<math.h>
 #include<time.h>
 

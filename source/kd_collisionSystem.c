@@ -3,17 +3,12 @@
 #include"../include/kd_collisionSystem.h"
 #include<math.h>
 #include<time.h>
-#include "../include/KD_Helping_func.h"
-#include "../include/particle.h"
 
-// function to print array elements
-void printArray(Particle array[], int size) {
-	for (int i = 0; i < size; ++i) {
-		printf(" x = %lf \t y = %lf \n", array[i].x,array[i].y);
-	}
-}
-
-
+// Create the tree
+// @param - Particle array
+// @param - start point of the array
+// @param - end point of the array
+// @param - level /depth - intially =  0
 kdtree createKDTree(Particle points[],int start , int end , int level) {
 	if (start > end) return NULL;
 	// Calculate the current dimension (level)
@@ -44,39 +39,26 @@ kdtree createKDTree(Particle points[],int start , int end , int level) {
 	return root;	   
 }
 
-void displayKDTree(kdtree root) {
-	if (root == NULL)
-		return;
 
-	displayKDTree(root->left);
-	printf("%.2f\t%.2f\t%.2f\n", root->ball.x, root->ball.y,root->ball.color.r);
-	displayKDTree(root->right);
-	return;
-}
-
-void Pre_order(kdtree root) {
-	if (root == NULL)
-		return;
-
-	printf("(%.2f, %.2f)\n", root->ball.x, root->ball.y);
-	Pre_order(root->left);
-	Pre_order(root->right);
-	return;
-}
-
+//Collision check between the paritcles 
+//@param - particle instance - p1
+//@param - particle instance - p2
 int collisionCheck_P2P(Particle p1,Particle p2){
 	double dist = sqrt(calculateDistance(p1,p2));
 	if(dist <= (p1.radius + p2.radius)) return 1;
 	return 0;
 }
 
-
+//Updating the tree using the array
+//@param - kdtree pointer i.e root node
+//@param - Particle array
+//@param - start point of the array
+//@param - end point of the array
+//@param - level /depth - intially =  0
 kdtree update_tree(kdtree root,Particle points[],int start , int end , int level) {
 	if (start > end) return NULL;
-	// Calculate the current dimension (level)
 	int currentLevel = level % 2;
 
-	// Sort the points array based on the current level
 	if (currentLevel == 0) {
 		quickSort_xy(points,start,end,&currentLevel);
 	}
@@ -84,21 +66,22 @@ kdtree update_tree(kdtree root,Particle points[],int start , int end , int level
 		quickSort_xy(points,start,end,&currentLevel);
 	} 		
 
-	// Find the median index
 	int medianIndex;
 	if((end - start) % 2) medianIndex = ((end-start)/2) + 1 + start;
 	else medianIndex = start +  (end-start)/2 ;
 
-	// Create a new node with the median point
 	root->ball = points[medianIndex]; 
 
-	// Recursively construct the left and right subtrees
 	root->left = update_tree(root->left,points, start, medianIndex - 1, level + 1);
 	root->right = update_tree(root->right,points, medianIndex + 1, end, level + 1);
 
 	return root;	   
 }
 
+//Helping function for finding the nearest neighbor
+//@param - kdnode pointer node-1
+//@param - kdnode pointer node-2
+//@param - Particle pointer
 kdtree closest(kdtree node1, kdtree node2, Particle* particle){
 	if( node1 == NULL) return node2;
 	
@@ -118,6 +101,9 @@ kdtree closest(kdtree node1, kdtree node2, Particle* particle){
 }
 
 // Function to find the nearest neighbor in the KD-tree
+// @param - knode pointer
+// @param - paritcle pointer
+// @param - depth/level
 kdtree findNN(kdtree root,Particle* particle, int depth) {
 	if(root == NULL) return NULL;
 	kdtree temp = NULL;
@@ -168,7 +154,8 @@ kdtree findNN(kdtree root,Particle* particle, int depth) {
 }
 	
 
-
+//Destroys the kdtree
+//@param  - knode pointer
 void destroyKDTree(kdtree root) {
 	if (root == NULL)
 		return;
@@ -179,7 +166,9 @@ void destroyKDTree(kdtree root) {
 	free(root);
 }
 
-
+//Function to handle the collision between the particle 
+//@param  - Particle pointer - p1
+//@param  - Particle pointer - p2
 void handle_collision(Particle* p1, Particle* p2){
     double dx = p1->x - p2->x; 
     double dy = p1->y - p2->y; 
@@ -198,7 +187,11 @@ void handle_collision(Particle* p1, Particle* p2){
          p2->vy -= (2 * p1->mass / M) * impact_vel * collision_normal_y ;
     }
 }
-     
+
+//Helping Function for rebalancing tree
+//@param - pointers to tree
+//@param - Particle pointer to store the new particles temporary
+//@param - index to add element in the array
 void collectPointsFromKDTree(kdtree  node, Particle* collectedPoints, int* index) {
     if (node == NULL) {
         return;
@@ -214,6 +207,10 @@ void collectPointsFromKDTree(kdtree  node, Particle* collectedPoints, int* index
     // Traverse right subtree
     collectPointsFromKDTree(node->right, collectedPoints, index);
 }
+
+//Rebalancing the KDTREE
+//@param - kdtree pointer
+//@param - number of particles
 void rebalanceKDTree(kdtree root ,int numParticles) {
     // Step 1: Traverse the KD tree and collect points in an array
     Particle* collectedPoints = (Particle*)malloc(sizeof(Particle) * numParticles);
@@ -226,6 +223,101 @@ void rebalanceKDTree(kdtree root ,int numParticles) {
     free(collectedPoints);
 }
 
+void move(Particle* p, double dt){
+	p->x += p->vx * dt;
+	p->y += p->vy * dt;
+}
+
+void move_particles(kdtree root,double k){
+	if(root == NULL) return;
+	//UPDATING AND COLLISION HANDELLING
+	move(&(root->ball),k);
+	move_particles(root->left,k);
+	move_particles(root->right,k);
+}
+
+
+void update_particles_boundary(kdtree root){
+	if(!root) return ;
+	
+	double left_gap = root->ball.x - root->ball.radius + 1;
+        double right_gap = 1 - root->ball.x - root->ball.radius;
+        double bottom_gap = root->ball.y - root->ball.radius + 1;
+        double top_gap = 1 - root->ball.y - root->ball.radius;
+
+	if(left_gap < 0 && root->ball.vx < 0){
+            //propagate_sys(qt_sys, left_gap / (root->ball.vx));
+            root->ball.vx *= -1;
+            //propagate_sys(qt_sys, -left_gap / (root->ball.vx));
+        }
+
+        else if(right_gap < 0 && root->ball.vx > 0){
+            //propagate_sys(qt_sys, right_gap / (root->ball.vx));
+            root->ball.vx *= -1;
+            //propagate_sys(qt_sys, -right_gap / (root->ball.vx));
+        }
+
+        if(bottom_gap < 0 && root->ball.vy < 0){
+            //propagate_sys(qt_sys, bottom_gap / (root->ball.vy));
+            root->ball.vy *= -1;
+            //propagate_sys(qt_sys, -bottom_gap / (root->ball.vy));
+        }
+
+        else if(top_gap < 0 && root->ball.vy > 0){
+            //propagate_sys(qt_sys, top_gap / (root->ball.vy));
+            root->ball.vy *= -1;
+            //propagate_sys(qt_sys, -top_gap / (root->ball.vy));
+        }
+	
+	update_particles_boundary(root->left);
+	update_particles_boundary(root->right);
+
+}
+
+void propagate_sys(particleSystem* qt_sys, double dt){
+    for(int i = 0; i < qt_sys->particleCount; i++){
+        Particle* particle = &(qt_sys->particleArray)[i];
+        particle->x += particle->vx * dt;
+        particle->y += particle->vy * dt;
+    }
+}
+
+void reverse_at_boundry(particleSystem* qt_sys){
+    for (int i = 0; i < qt_sys->particleCount; i++) {
+        Particle* particle = &(qt_sys->particleArray[i]);
+
+        double left_gap = particle->x - particle->radius + 1;
+        double right_gap = 1 - particle->x - particle->radius;
+        double bottom_gap = particle->y - particle->radius + 1;
+        double top_gap = 1 - particle->y - particle->radius;
+
+        if(left_gap < 0 && particle->vx < 0){
+            //propagate_sys(qt_sys, left_gap / (particle->vx));
+            particle->vx *= -1;
+            //propagate_sys(qt_sys, -left_gap / (particle->vx));
+        }
+
+        else if(right_gap < 0 && particle->vx > 0){
+            //propagate_sys(qt_sys, right_gap / (particle->vx));
+            particle->vx *= -1;
+            //propagate_sys(qt_sys, -right_gap / (particle->vx));
+        }
+
+        if(bottom_gap < 0 && particle->vy < 0){
+            //propagate_sys(qt_sys, bottom_gap / (particle->vy));
+            particle->vy *= -1;
+            //propagate_sys(qt_sys, -bottom_gap / (particle->vy));
+        }
+
+        else if(top_gap < 0 && particle->vy > 0){
+            //propagate_sys(qt_sys, top_gap / (particle->vy));
+            particle->vy *= -1;
+            //propagate_sys(qt_sys, -top_gap / (particle->vy));
+        }
+
+    }
+
+}
 
 /*
 int main(){

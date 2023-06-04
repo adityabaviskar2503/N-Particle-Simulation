@@ -5,7 +5,7 @@
 #include <math.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
-#define MAX_PARTICLES 15
+#define MAX_PARTICLES 50
 
 typedef struct quadtree_node{
     double x;
@@ -439,7 +439,7 @@ void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){
                 Particle* p2 = (*node)->particles[j];
                 double distance = distanceParticles(p1, p2);
                 if(distance <= p1->radius + p2->radius){
-                    printf("overlap detected\n");
+                    //printf("overlap detected\n");
                     handle_collision(p1, p2, qt_sys);
                     
                 }

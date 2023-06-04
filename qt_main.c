@@ -81,10 +81,21 @@ void keyboardFunc(unsigned char key, int x, int y) {
 }
 
 // Main function
-int main(int argc, char** argv) {	
+int main(int argc, char* argv[]) {	
 	//createRandomSystem(&(pq_sys.sys), 200);
     QT = createquadtree_node(0, 0, 2, 2);
-	createRandomSystem(&(qt_sys), 600);
+
+    if(argc == 1){
+	    createRandomSystem(&(qt_sys), 1000);
+    }
+    else if(argc == 2){
+        createRandomSystemFromFile(&(qt_sys), argv[1]);
+    }
+    else{
+        printf("usage: ./sim <optional file argument>");
+        return 1;
+    }
+
     printf("particle array size id: %d\n",qt_sys->particleCount);
     for(int i = 0 ; i < qt_sys->particleCount ; i++){
     	//particle = qt_sys->particleArray[i];

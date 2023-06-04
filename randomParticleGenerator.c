@@ -15,6 +15,35 @@ void createRandomSystem(particleSystem** system, int particleCount){
 	divideAndAssignParticles(particleCount, -1, 1, -1, 1, (*system)->particleArray, 0);
 }
 
+void createRandomSystemFromFile(particleSystem** system, char* file){
+	*system = (particleSystem*)malloc(sizeof(particleSystem));
+	if(!(*system)){
+		printf("Malloc in generation of particleSystem using file input failed");
+		return;
+	}
+	FILE* f = fopen(file,"r");
+    printf("here\n");
+	if (f == NULL) {
+        	printf("Failed to open the file\nreturning with exit status 1\n");
+        	free(*system);
+        	exit(0);
+    	}
+	fscanf(f,"%d",&((*system)->particleCount));
+	//(*system)->particleCount = particleCount;
+	(*system)->particleArray = (Particle*)malloc(sizeof(Particle)*((*system)->particleCount));
+	//Particle* particleArray = (*system)->particleArray;
+	//float radius, x, y, vx, vy, mass, r, g, b;
+	for (int i = 0; i < (*system)->particleCount; i++) {
+        	// Read the values from the file and assign them to the corresponding fields of particleArray[i]
+        	fscanf(f, "%lf %lf %lf %lf %lf %lf %f %f %f", &((*system)->particleArray[i].radius), &((*system)->particleArray[i].x),
+               	&((*system)->particleArray[i].y), &((*system)->particleArray[i].vx), &((*system)->particleArray[i].vy),
+               	&((*system)->particleArray[i].mass), &((*system)->particleArray[i].color.r), &((*system)->particleArray[i].color.g),
+               	&((*system)->particleArray[i].color.b));
+		(*system)->particleArray[i].collisions = 0;
+    	}
+	fclose(f);
+}
+
 double distance(double x1, double y1, double x2, double y2) {
 	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 }
@@ -90,13 +119,4 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 		divideAndAssignParticles(particleCount/4, (left+right)/2, right, bottom, (top+bottom)/2, particles, arrayPos+3*(particleCount/4));
 	}
 }
-
-//void displaySystemConfiguration(CollisionSystem system){
-//	Particle* particleArray = system->particleArray;
-//	int count = system->particleCount;
-//	for(int i = 0;i<particleCount;i++){
-//		printf("Particle %d - x:")
-//	}
-//}
-
 

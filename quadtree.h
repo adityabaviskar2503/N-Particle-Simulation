@@ -5,7 +5,7 @@
 #include <math.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
-#define MAX_PARTICLES 50
+#define MAX_PARTICLES 20
 
 typedef struct quadtree_node{
     double x;
@@ -333,47 +333,6 @@ double distanceParticles(Particle* p1, Particle* p2){
     double distance = sqrt(dx * dx + dy * dy ); 
     return distance;
 }
-
-//double approachVelocityQuadtree(Particle* p1, Particle* p2){
-//    double dvx = p2->vx - p1->vx;
-//    double dvy = p2->vy - p1->vy;
-//    double drx = (p2->x - p1->x) * 1000;
-//    double dry = (p2->y - p1->y) * 1000;
-//    double dr_mag = sqrt(drx * drx + dry * dry);
-//    printf("mag is %lf\n",dr_mag);
-//    if(dr_mag == 0){
-//        return 0;
-//    }
-//
-//    double dvx_approach = dvx * drx;
-//    double dvy_approach = dvy * dry;
-//    double speed = sqrt(dvx_approach * dvx_approach + dvy_approach * dvy_approach) / dr_mag;
-//}
-
-//void handle_collision(Particle* p1, Particle* p2, particleSystem* qt_sys){
-//    double dx = p1->x - p2->x; 
-//    double dy = p1->y - p2->y; 
-//    double dvx = p1->vx - p2->vx; 
-//    double dvy = p1->vy - p2->vy; 
-//    double rel_speed = dx * dvx + dy + dvy;
-//    double dt = distanceParticles(p1, p2) / rel_speed;
-//    
-////    p1->x += -1 * p1->vx * dt;
-////    p1->y += -1 * p1->vy * dt;
-////    p2->x += -1 * p2->vx * dt;
-////    p2->y += -1 * p2->vy * dt;
-//    //propagate_sys(qt_sys, -dt);
-//
-//    double m1 = p1->mass, m2 = p2->mass;
-//    double vx1 = p1->vx, vx2 = p2->vx;
-//    double vy1 = p1->vy, vy2 = p2->vy;
-//    p1->vx = ((m1 - m2) * vx1 + 2 * m2 * vx2) / (m1 + m2);
-//    p1->vy = ((m1 - m2) * vy1 + 2 * m2 * vy2) / (m1 + m2);
-//    p2->vx = ((m2 - m1) * vx2 + 2 * m1 * vx1) / (m1 + m2);
-//    p2->vy = ((m2 - m1) * vy2 + 2 * m1 * vy1) / (m1 + m2);
-//    //propagate_sys(qt_sys, dt);
-//
-//    }
 
 void bounceOff(Particle* p1, Particle* p2){
 	double dx = p2->x - p1->x; 

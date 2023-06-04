@@ -62,10 +62,6 @@ void update() {
         printf("WRONG quadtree\n");
     detectCollisionQuadtree(qt_sys, &QT);  
 
-//    printf("\n");
-//    for(int i = 0 ; i < qt_sys->particleCount ; i++){
-//        printf("%lf ",(qt_sys->particleArray[i]).x);
-//    }
     // Redraw the scene
     glutPostRedisplay();
 
@@ -82,11 +78,10 @@ void keyboardFunc(unsigned char key, int x, int y) {
 
 // Main function
 int main(int argc, char* argv[]) {	
-	//createRandomSystem(&(pq_sys.sys), 200);
     QT = createquadtree_node(0, 0, 2, 2);
 
     if(argc == 1){
-	    createRandomSystem(&(qt_sys), 1000);
+	    createRandomSystem(&(qt_sys), 500);
     }
     else if(argc == 2){
         createRandomSystemFromFile(&(qt_sys), argv[1]);

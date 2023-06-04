@@ -50,7 +50,7 @@ void update() {
     // Update the ball position
 
 
-    propagate_sys(qt_sys, 1.0);
+    propagate_sys(qt_sys, 0.5);
     reverse_at_boundry(qt_sys);
     clearQuadtree(QT);
     QT = createquadtree_node(0, 0, 2, 2);
@@ -84,7 +84,7 @@ void keyboardFunc(unsigned char key, int x, int y) {
 int main(int argc, char** argv) {	
 	//createRandomSystem(&(pq_sys.sys), 200);
     QT = createquadtree_node(0, 0, 2, 2);
-	createRandomSystem(&(qt_sys), 120);
+	createRandomSystem(&(qt_sys), 600);
     printf("particle array size id: %d\n",qt_sys->particleCount);
     for(int i = 0 ; i < qt_sys->particleCount ; i++){
     	//particle = qt_sys->particleArray[i];

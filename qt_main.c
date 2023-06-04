@@ -50,7 +50,10 @@ void update() {
     // Update the ball position
 
 
-    propagate_sys(qt_sys, 0.5);
+    double dt = (MIN_RADIUS);
+    dt /= (MAX_VELOCITY_COMPONENT);
+
+    propagate_sys(qt_sys, dt);
     reverse_at_boundry(qt_sys);
     clearQuadtree(QT);
     //QT = createquadtree_node(0, 0, 2, 2);
@@ -82,7 +85,7 @@ int main(int argc, char* argv[]) {
     QT = createquadtree_node(0, 0, RIGHT_BOUNDARY - LEFT_BOUNDARY, TOP_BOUNDARY - BOTTOM_BOUNDARY);
 
     if(argc == 1){
-	    createRandomSystem(&(qt_sys), 700);
+	    createRandomSystem(&(qt_sys), 200);
     }
     else if(argc == 2){
         createRandomSystemFromFile(&(qt_sys), argv[1]);

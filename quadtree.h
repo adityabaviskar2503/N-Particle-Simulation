@@ -5,7 +5,7 @@
 #include <math.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
-#define MAX_PARTICLES 10
+#define MAX_PARTICLES 15
 
 typedef struct quadtree_node{
     double x;

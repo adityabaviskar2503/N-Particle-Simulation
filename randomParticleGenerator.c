@@ -83,13 +83,13 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
     if(particleCount <= 40){
         //	printf("%d %lf %lf %lf %lf %d\n",particleCount, left, right, bottom, top, arrayPos);
         for (int i = arrayPos; i < arrayPos+particleCount; i++){
-            particles[i].radius = getRandomDouble(2, 2);
+            particles[i].radius = getRandomDouble(MIN_RADIUS, MAX_RADIUS);
             particles[i].x = getRandomDouble(left + particles[i].radius, right - particles[i].radius);
             particles[i].y = getRandomDouble(bottom + particles[i].radius, top - particles[i].radius);
             //printf("%d x = %lf y = %lf\n",i,particles[i].x,particles[i].y);
-            particles[i].vx = getRandomDouble(-2,2);
-            particles[i].vy = getRandomDouble(-2,2);
-            particles[i].mass = getRandomDouble(0.1,0.3);
+            particles[i].vx = getRandomDouble(-MAX_VELOCITY_COMPONENT, MAX_VELOCITY_COMPONENT);
+            particles[i].vy = getRandomDouble(-MAX_VELOCITY_COMPONENT, MAX_VELOCITY_COMPONENT);
+            particles[i].mass = getRandomDouble(MIN_MASS, MAX_MASS);
             particles[i].collisions = 0;
             particles[i].color.r = getRandomDouble(0,1);
             particles[i].color.g = getRandomDouble(0,1); 
@@ -101,7 +101,7 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
                 //	printf("**%d**\n",i);
                 //	printf("Before:");
                 //	printf("%f %f %f",particles[i].x, particles[i].y, particles[i].radius);
-                particles[i].radius = getRandomDouble(2,2);
+                particles[i].radius = getRandomDouble(MIN_RADIUS, MAX_RADIUS);
                 particles[i].x = getRandomDouble(left + particles[i].radius, right - particles[i].radius);
                 particles[i].y = getRandomDouble(bottom + particles[i].radius, top - particles[i].radius);
                 //	printf("\nAfter:");

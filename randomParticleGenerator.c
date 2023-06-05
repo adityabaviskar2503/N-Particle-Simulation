@@ -91,11 +91,11 @@ void divideAndAssignParticles(int particleCount, double left, double right, doub
 	        	//particles[i].mass = getRandomDouble(0.1,1);
 	        	particles[i].mass = 1;
 	        	particles[i].collisions = 0;
-		        //particles[i].color.r = getRandomDouble(0,1);
-		        particles[i].color.r = 1.0;
-		        //particles[i].color.g = getRandomDouble(0,1); 
-		        particles[i].color.g = 1.0; 
-			//particles[i].color.b = getRandomDouble(0,1);
+		        particles[i].color.r = getRandomDouble(0,1);
+		        //particles[i].color.r = 1.0;
+		        particles[i].color.g = getRandomDouble(0,1); 
+		        //particles[i].color.g = 1.0; 
+			particles[i].color.b = getRandomDouble(0,1);
 			particles[i].color.b = 1.0;
 			int checkOverlapCount = 0;
 	        // Check for overlaps and reassign random values if necessary

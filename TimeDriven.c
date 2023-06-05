@@ -16,7 +16,8 @@
 #define HEIGHT 1000
 #define PARTICLE_NUM 200
 int width = 1000, height = 1000;
-
+//int z=0;
+//int u=0;
 void glutPostRedisplay(void);
 void glutTimerFunc(unsigned int millis, void (*timerFunc)(int value), int value);
 
@@ -59,6 +60,8 @@ double calculateDistance(double x1, double y1, double x2, double y2) {
 void update(int value) {
     Particle particle;
     double ballRadius;
+	int z=0;
+	int u=0;
 
     for (int i = 0; i < PQ_PARTICLE->particleCount; i++) {
         particle = PQ_PARTICLE->particleArray[i];
@@ -84,7 +87,7 @@ void update(int value) {
         if ((*y - *radius <= -1 && *vy < 0) || (*y + *radius >= 1 && *vy > 0)) {
             *vy *= -1;
         }
-
+		z++;
         // Check for Particle collision
         for (int j = 0; j < PQ_PARTICLE->particleCount; j++) {
             Particle* otherParticle = &(PQ_PARTICLE->particleArray[j]);
@@ -120,9 +123,12 @@ void update(int value) {
                     otherParticle->vx -= impulse2 * collisionNormalX;
                     otherParticle->vy -= impulse2 * collisionNormalY;
                 }
+				u++;
             }
         }
     }
+    int comp = z*u;
+    printf("%d\n",comp);
 
     // Redraw the scene
     glutPostRedisplay();

@@ -14,10 +14,9 @@
 #define PQ_PARTICLE pq_sys.sys
 #define WIDTH 1000
 #define HEIGHT 1000
-#define PARTICLE_NUM 200
+#define PARTICLE_NUM 500
 int width = 1000, height = 1000;
-//int z=0;
-//int u=0;
+
 void glutPostRedisplay(void);
 void glutTimerFunc(unsigned int millis, void (*timerFunc)(int value), int value);
 

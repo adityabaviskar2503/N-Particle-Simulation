@@ -6,7 +6,7 @@
 #include <limits.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
-#define MAX_PARTICLES 15
+#define MAX_PARTICLES (PARTICLE_COUNT / 2)
 
 typedef struct quadtree_node{
     double x;
@@ -69,7 +69,7 @@ bool isCuttingRegion(double Cx, double Cy, double Rx, double Ry, double radius, 
 void subdivideNode(quadtree_node* node) {
     double subWidth = node->width / 2.0;
     double subHeight = node->height / 2.0;
-    printf("new width is %lf, new height is %lf\n",subWidth, subHeight);
+    //printf("new width is %lf, new height is %lf\n",subWidth, subHeight);
 //    if(subWidth < 0.001 || subHeight < 0.001){
 //        return;
 //    }
@@ -370,7 +370,33 @@ void handle_collision(Particle* p1, Particle* p2, particleSystem* qt_sys){
    
 }
 
-void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){
+//void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){
+//    if((*node)->children[0] == NULL){
+//        for(int i = 0; i < (*node)->particle_count - 1; i++){
+//            Particle* p1 = (*node)->particles[i];
+//            for(int j = i+1; j < (*node)->particle_count; j++){
+//                Particle* p2 = (*node)->particles[j];
+//                double distance = distanceParticles(p1, p2);
+//                if(distance <= p1->radius + p2->radius){
+//                    //printf("overlap detected\n");
+//                    handle_collision(p1, p2, qt_sys);
+//                    
+//                }
+////                if (distance == p1->radius + p2->radius){
+////                    bounceOff(p1, p2);
+////                }
+//                    
+//            }
+//        }
+//
+//        return;
+//    }
+//    for(int i = 0; i < 4; i++){
+//        detectCollisionQuadtree(qt_sys, &(*node)->children[i]);
+//    }
+//}
+
+double detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node, int comparisons){
     if((*node)->children[0] == NULL){
         for(int i = 0; i < (*node)->particle_count - 1; i++){
             Particle* p1 = (*node)->particles[i];
@@ -389,13 +415,14 @@ void detectCollisionQuadtree(particleSystem* qt_sys, quadtree_node** node){
             }
         }
 
-        return;
+        double n = (*node)->particle_count;
+        return (n * (n - 1) / 2);
     }
     for(int i = 0; i < 4; i++){
-        detectCollisionQuadtree(qt_sys, &(*node)->children[i]);
+        comparisons += detectCollisionQuadtree(qt_sys, &(*node)->children[i], comparisons);
     }
+    return comparisons;
 }
-
 
 void display_QT(quadtree_node* node){
 

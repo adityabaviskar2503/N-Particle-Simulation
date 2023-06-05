@@ -10,8 +10,9 @@
 #define MAX_VELOCITY_COMPONENT 2
 #define MAX_MASS 0.3
 #define MIN_MASS 0.1
-#define MAX_RADIUS 2
-#define MIN_RADIUS 2
+#define MAX_RADIUS 2.0
+#define MIN_RADIUS 2.0
+#define PARTICLE_COUNT 100
 
 typedef struct particleSystem{
 	Particle* particleArray;

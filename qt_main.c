@@ -13,7 +13,8 @@
 // Window size
 int width = 1000, height = 1000;
 int iterations = 0;
-int max_iterations = 1000;
+int max_iterations = 100;
+double total_comparision = 0;
 
 //pq_CollisionSystem pq_sys;
 particleSystem* qt_sys;
@@ -50,8 +51,9 @@ void drawCircle(float r, float x, float y){
 // Timer function for ball movement
 void update() {
     // Update the ball position
-    printf("current iteration: %d\n",iterations);
+    //printf("current iteration: %d\n",iterations);
     iterations ++;
+    double comparisons = 0;
 
 
     double dt = (MIN_RADIUS);
@@ -68,12 +70,21 @@ void update() {
     //updateQuadtree(&QT, &QT);
     if(!correct_quadtree(QT))
         printf("WRONG quadtree\n");
-    detectCollisionQuadtree(qt_sys, &QT);  
+    comparisons = detectCollisionQuadtree(qt_sys, &QT, comparisons);  
+    //printf("%lf comparisons performed\n",comparisons);
+    total_comparision += comparisons;
 
-    if (iterations > max_iterations) {
-        // Exit the main loop
-        glutLeaveMainLoop();
-    }
+//    if (iterations > max_iterations) {
+//        total_comparision /= (iterations - 1);
+//        printf("***** SUMMARY *****\n");
+//        printf("No. of particles: %d\n",PARTICLE_COUNT);
+//        printf("max particles per quadtree node: %d\n",MAX_PARTICLES);
+//        printf("size range: %d - %d\n",MIN_RADIUS, MAX_RADIUS);
+//        printf("velocity range: 0 - %d\n", MAX_VELOCITY_COMPONENT);
+//        printf("average comparisons per iteration: %lf\n",total_comparision);
+//        // Exit the main loop
+//        glutLeaveMainLoop();
+//    }
 
     // Redraw the scene
     glutPostRedisplay();
@@ -85,6 +96,14 @@ void update() {
 
 void keyboardFunc(unsigned char key, int x, int y) {
     if (key == 'x' || key == 'X') {
+        total_comparision /= (iterations - 1);
+        printf("***** SUMMARY *****\n");
+        printf("No. of particles: %d\n",PARTICLE_COUNT);
+        printf("max particles per quadtree node: %d\n",MAX_PARTICLES);
+        printf("size range: %f - %f\n",MIN_RADIUS, MAX_RADIUS);
+        printf("velocity range: 0 - %d\n", MAX_VELOCITY_COMPONENT);
+        printf("total iterations: %d\n", iterations-1);
+        printf("average comparisons per iteration: %lf\n",total_comparision);
         // Exit the main loop
         glutLeaveMainLoop();
     }
@@ -95,7 +114,7 @@ int main(int argc, char* argv[]) {
     QT = createquadtree_node(0, 0, RIGHT_BOUNDARY - LEFT_BOUNDARY, TOP_BOUNDARY - BOTTOM_BOUNDARY);
 
     if(argc == 1){
-	    createRandomSystem(&(qt_sys), 200);
+	    createRandomSystem(&(qt_sys), PARTICLE_COUNT);
     }
     else if(argc == 2){
         createRandomSystemFromFile(&(qt_sys), argv[1]);
@@ -110,7 +129,6 @@ int main(int argc, char* argv[]) {
     	//particle = qt_sys->particleArray[i];
         insertParticleQuadtree(&QT, &(qt_sys->particleArray[i]));
     }
-    printf("here\n");
 //    display_QT(QT);
 
 

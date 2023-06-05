@@ -79,8 +79,9 @@ void update() {
 //        printf("***** SUMMARY *****\n");
 //        printf("No. of particles: %d\n",PARTICLE_COUNT);
 //        printf("max particles per quadtree node: %d\n",MAX_PARTICLES);
-//        printf("size range: %d - %d\n",MIN_RADIUS, MAX_RADIUS);
-//        printf("velocity range: 0 - %d\n", MAX_VELOCITY_COMPONENT);
+//        printf("size range: %f - %f\n",MIN_RADIUS, MAX_RADIUS);
+//        printf("velocity range: 0 - %f\n", MAX_VELOCITY_COMPONENT);
+//        printf("total iterations: %d\n", iterations-1);
 //        printf("average comparisons per iteration: %lf\n",total_comparision);
 //        // Exit the main loop
 //        glutLeaveMainLoop();
@@ -101,7 +102,7 @@ void keyboardFunc(unsigned char key, int x, int y) {
         printf("No. of particles: %d\n",PARTICLE_COUNT);
         printf("max particles per quadtree node: %d\n",MAX_PARTICLES);
         printf("size range: %f - %f\n",MIN_RADIUS, MAX_RADIUS);
-        printf("velocity range: 0 - %d\n", MAX_VELOCITY_COMPONENT);
+        printf("velocity range: 0 - %f\n", MAX_VELOCITY_COMPONENT);
         printf("total iterations: %d\n", iterations-1);
         printf("average comparisons per iteration: %lf\n",total_comparision);
         // Exit the main loop

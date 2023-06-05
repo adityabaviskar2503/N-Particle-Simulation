@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <math.h>
+#include <limits.h>
 #include "particle.h"
 #include "randomParticleGenerator.h"
 #define MAX_PARTICLES 15
@@ -252,74 +253,42 @@ int getParticleCountRegion(quadtree_node* node){
 }
 
 //void updateQuadtree(quadtree_node** node, quadtree_node** root) {
-//    if (*node == null) {
-//        return;
-//    }
-//
-//    if ((*node)->children[0] == null) {
-//        for (int i = 0; i < (*node)->particle_count; i++) {
-//            particle* particle = (*node)->particles[i];
-//            if (!particle) {
-//                break;
-//            }
-//
-//            if (! iscuttingregion(particle->x, particle->y, (*node)->x, (*node)->y, particle->radius, (*node)->width, (*node)->height)) {
-//                (*node)->particles[i] = (*node)->particles[(*node)->particle_count - 1];
-//                (*node)->particles[(*node)->particle_count - 1] = null;
-//                (*node)->particle_count --;
-//                insertparticlequadtree(root, particle);
-//            }
-//        }
-//        return;
-//    }
-//
-//    if(getparticlecountregion(*node) == 0){
-//        destroyquadtree(*node);
-//    }
-//    else{
-//        updatequadtree(&(*node)->children[0], root);
-//        updatequadtree(&(*node)->children[1], root);
-//        updatequadtree(&(*node)->children[2], root);
-//        updatequadtree(&(*node)->children[3], root);
-//    }
-//}
-void updateQuadtree(quadtree_node** node, quadtree_node** root) {
 //    if (*node == NULL) {
 //        return;
 //    }
 //
-//    if ((*node)->children[0] != NULL) {
-//
-//        if(getParticleCountRegion(*node) == 0){
-//            for(int i = 0; i < 4; i++){
-//                destroyQuadtree((*node)->children[i]);
+//    if ((*node)->children[0] == NULL) {
+//        for (int i = 0; i < (*node)->particle_count; i++) {
+//            Particle* particle = (*node)->particles[i];
+//            if (!particle) {
+//                break;
 //            }
-//            //destroyquadtree(*node);
+//
+//            if (! isCuttingRegion(particle->x, particle->y, (*node)->x, (*node)->y, particle->radius, (*node)->width, (*node)->height)) {
+//                (*node)->particles[i] = (*node)->particles[(*node)->particle_count - 1];
+//                (*node)->particles[(*node)->particle_count - 1] = NULL;
+//                (*node)->particle_count --;
+//                insertParticleQuadtree(root, particle);
+//            }
 //        }
+//        return;
+//    }
+//
+//    if(getParticleCountRegion(*node) == 0){
+//        destroyQuadtree(*node);
+//    }
+//    else{
 //        updateQuadtree(&(*node)->children[0], root);
 //        updateQuadtree(&(*node)->children[1], root);
 //        updateQuadtree(&(*node)->children[2], root);
 //        updateQuadtree(&(*node)->children[3], root);
 //    }
-//
-//    else if ((*node)->children[0] == NULL) {
-        for (int i = 0; i < (*node)->particle_count; i++) {
-            Particle* particle = (*node)->particles[i];
-            if (!particle) {
-                break;
-            }
+//}
 
-            if (! isCuttingRegion(particle->x, particle->y, (*node)->x, (*node)->y, particle->radius, (*node)->width, (*node)->height)) {
-                (*node)->particles[i] = (*node)->particles[(*node)->particle_count - 1];
-                (*node)->particles[(*node)->particle_count - 1] = NULL;
-                (*node)->particle_count --;
-                insertParticleQuadtree(root, particle);
-            }
-        }
-        return;
+void updateQuadtree(quadtree_node** node, quadtree_node** root) {
     
-
 }
+
 bool isOverlappingParticles(Particle* p1, Particle* p2){
     double dx = p1->x - p2->x;
     double dy = p1->y - p2->y;
@@ -328,6 +297,9 @@ bool isOverlappingParticles(Particle* p1, Particle* p2){
 }
 
 double distanceParticles(Particle* p1, Particle* p2){
+    if(p1 == NULL || p2 == NULL){
+        return INT_MAX;
+    }
     double dx = p1->x - p2->x;
     double dy = p1->y - p2->y;
     double distance = sqrt(dx * dx + dy * dy ); 
@@ -354,10 +326,18 @@ void bounceOff(Particle* p1, Particle* p2){
 
 
 bool correct_quadtree(quadtree_node* node){
+    if(!node)
+        return true;
     if(node->children[0] == NULL){
         bool result = true;
+        if(node->particle_count == 0){
+            return true;
+        }
         for(int i = 0; i < node->particle_count; i++){
             Particle* particle = node->particles[i];
+            if(particle == NULL){
+                return true;
+            }
             result = result && isCuttingRegion(particle->x, particle->y, node->x, node->y, particle->radius, node->width, node->height);
         }
         return result;

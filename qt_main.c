@@ -12,6 +12,8 @@
 //#define PQ_PARTICLE pq_sys.sys
 // Window size
 int width = 1000, height = 1000;
+int iterations = 0;
+int max_iterations = 1000;
 
 //pq_CollisionSystem pq_sys;
 particleSystem* qt_sys;
@@ -48,6 +50,8 @@ void drawCircle(float r, float x, float y){
 // Timer function for ball movement
 void update() {
     // Update the ball position
+    printf("current iteration: %d\n",iterations);
+    iterations ++;
 
 
     double dt = (MIN_RADIUS);
@@ -66,8 +70,14 @@ void update() {
         printf("WRONG quadtree\n");
     detectCollisionQuadtree(qt_sys, &QT);  
 
+    if (iterations > max_iterations) {
+        // Exit the main loop
+        glutLeaveMainLoop();
+    }
+
     // Redraw the scene
     glutPostRedisplay();
+
 
     // Set the timer for the next update
     glutTimerFunc(16, update, 0);

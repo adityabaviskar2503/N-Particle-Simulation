@@ -14,7 +14,7 @@
 #define PQ_PARTICLE pq_sys.sys
 #define WIDTH 1000
 #define HEIGHT 1000
-#define PARTICLE_NUM 500
+#define PARTICLE_NUM 800
 int width = 1000, height = 1000;
 
 void glutPostRedisplay(void);

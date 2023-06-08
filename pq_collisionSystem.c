@@ -47,7 +47,7 @@ void fillPQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys){
 }
 
 void updatePQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys){
-        
+        int count = 0;
 	while(pq->size != 0){
 		Event* event = dequeue(pq);
         	//if(!isValid(event)) return;
@@ -56,6 +56,7 @@ void updatePQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys){
 			//printf("Invalid");
 			free(event);
 			event = dequeue(pq);
+			//count++;
 		}
         	Particle* particle1 = event->particle1;
         	Particle* particle2 = event->particle2;
@@ -65,12 +66,14 @@ void updatePQ(minPQ* pq, particleSystem* sys, pq_CollisionSystem* pq_sys){
         	}
 		pq_sys->t = event->time;
 		//printf("%f ", pq_sys->t);
+		count++;
 		if(particle1 != NULL && particle2 != NULL) bounceOff(particle1, particle2);
 		else if(particle1 != NULL && particle2 == NULL) bounceOffVerticalWall(particle1);
 		else if (particle1 == NULL && particle2 != NULL) bounceOffHorizontalWall(particle2);
 		else if (particle1 == NULL && particle2 == NULL) {
 			redraw(pq, pq_sys);
 			free(event);
+			printf("Collisions resolved:%d\n",count);
 			return;
 		}
 		predict(particle1, pq, sys, pq_sys);

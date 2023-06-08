@@ -40,7 +40,7 @@ void drawScene() {
 
 // Timer function for ball movement
 void update(int value) {
-	//printf("%d\n",pq_sys->pq->size);
+	printf("Size of priority queue:%d\n",pq_sys->pq->size);
 	if(!isPaused){
 		updatePQ(pq_sys->pq, pq_sys->sys, pq_sys);
 	 	// Redraw the scene
@@ -54,6 +54,9 @@ void keyboardFunc(unsigned char key, int x, int y) {
     	if (key == 'x' || key == 'X') {
         	// Exit the main loop
         	glutLeaveMainLoop();
+		free(pq_sys->pq);
+		free(pq_sys->sys);
+		free(pq_sys);
     	}
 	if(key == 'p' || key == 'P'){
 		isPaused = !isPaused;

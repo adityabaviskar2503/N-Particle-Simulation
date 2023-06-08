@@ -53,6 +53,10 @@ void enqueue(minPQ* queue, Event* event) {
 
 /*void enqueue(minPQ* queue, Event* event) {
     	if (queue->size == queue->capacity) {
+		if(queue->events[queue->size - 1]->time < event->time){
+			free(event);
+			return;
+		}	
     	    	// Remove the element at the last index
     	    	Event* removedEvent = queue->events[queue->size - 1];
     	    	free(removedEvent);
